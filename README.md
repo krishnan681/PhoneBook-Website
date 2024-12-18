@@ -24,14 +24,14 @@ Install Dependencies:
 
 2: The following packages will be installed as part of the project:
 
-@mui/material: Material-UI components for building a modern interface.
-@mui/x-data-grid: Advanced data grid components.
-axios: For making HTTP requests.
-fullcalendar: A calendar library for scheduling and events.
-react-bootstrap: Bootstrap components for React.
-react-circular-progressbar: For displaying circular progress indicators.
-react-router-dom: For managing navigation and routing in the app.
-react-calendar: For adding a customizable calendar to the application
+@mui/material: Material-UI  //components for building a modern interface.<br>
+@mui/x-data-grid: //Advanced data grid components.<br>
+axios: //For making HTTP requests.<br>
+fullcalendar: //A calendar library for scheduling and events.<br>
+react-bootstrap: //Bootstrap components for React.<br>
+react-circular-progressbar: //For displaying circular progress indicators.<br>
+react-router-dom: //For managing navigation and routing in the app.<br>
+react-calendar: //For adding a customizable calendar to the application.<br>
 
 <h3>Step 4:</h3>
 To start the development server, run:
