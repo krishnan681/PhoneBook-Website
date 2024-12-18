@@ -1,0 +1,162 @@
+import React, { useState, useEffect } from "react";
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
+import "react-circular-progressbar/dist/styles.css";
+import { Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Grid } from "@mui/material";
+import { useAuth } from "../Auth"; // Importing useAuth to access user data
+
+const DashBoard = () => {
+  const { userData, Logout } = useAuth();  // Accessing userData from Auth context
+  const [totals, setTotals] = useState({ totalRecords: 0, totalUniqueIds: 0 });
+  const [userEntries, setUserEntries] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [limit, setLimit] = useState(3000);
+  
+  // Fetch total records and unique IDs
+  const fetchTotals = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch("https://signpostphonebook.in/client_fetch.php");
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await response.json();
+      if (Array.isArray(data)) {
+        const totalRecords = data.length;
+        const uniqueIds = new Set(data.map((item) => item.id)).size;
+        setTotals({ totalRecords, totalUniqueIds: uniqueIds });
+        setError(null);
+      } else {
+        throw new Error("Invalid data structure received");
+      }
+    } catch (error) {
+      console.error("Error fetching totals:", error);
+      setError("Failed to load data.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Fetch last 10 entries for the user
+  const fetchUserEntries = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch("https://signpostphonebook.in/client_fetch.php");
+
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+
+      const data = await response.json();
+      if (Array.isArray(data)) {
+        const userSpecificEntries = data.filter((entry) => entry.mobileno === userData?.mobileno);  // Filter by mobileno
+        setUserEntries(userSpecificEntries.slice(-10));  // Get the last 10 entries for this user
+      } else {
+        throw new Error("Invalid data structure received");
+      }
+    } catch (error) {
+      console.error("Error fetching user entries:", error);
+      setError("Failed to load data.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchTotals();
+    fetchUserEntries();
+    const interval = setInterval(() => {
+      fetchTotals();
+      fetchUserEntries();
+    }, 10000);
+    return () => clearInterval(interval);
+  }, [userData?.mobileno]);  // Re-fetch when mobileno changes (user changes)
+
+  // Percentage calculations
+  const totalRecordsPercentage = Math.min((totals.totalRecords / limit) * 100, 100);
+  const totalUniqueIdsPercentage = Math.min((totals.totalUniqueIds / limit) * 100, 100);
+
+  return (
+    <Grid container spacing={3} style={{ padding: "20px" }}>
+      {/* Total Records and Total Users Boxes */}
+      <Grid item xs={12} sm={6} md={4}>
+        <Box bgcolor="#f5f5f5" border="1px solid #ddd" borderRadius="8px" padding="20px" display="flex" justifyContent="space-between" alignItems="center">
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <div style={{
+              width: "50px", height: "50px", borderRadius: "50%", backgroundColor: "#4caf50", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontSize: "24px", marginRight: "15px"
+            }}>📊</div>
+            <div>
+              <h2 style={{ margin: "0" }}>{loading ? "Loading..." : totals.totalRecords}</h2>
+              <p style={{ margin: "0", color: "#888" }}>Total Records</p>
+            </div>
+          </div>
+          <div style={{ width: "100px", height: "100px" }}>
+            <CircularProgressbar value={loading ? 0 : totalRecordsPercentage} text={`${loading ? 0 : totalRecordsPercentage.toFixed(1)}%`} styles={buildStyles({
+              textSize: "12px", textColor: "#4caf50", pathColor: "#4caf50", trailColor: "#ddd"
+            })} />
+          </div>
+        </Box>
+      </Grid>
+
+      <Grid item xs={12} sm={6} md={4}>
+        <Box bgcolor="#f5f5f5" border="1px solid #ddd" borderRadius="8px" padding="20px" display="flex" justifyContent="space-between" alignItems="center">
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <div style={{
+              width: "50px", height: "50px", borderRadius: "50%", backgroundColor: "#2196f3", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontSize: "24px", marginRight: "15px"
+            }}>👥</div>
+            <div>
+              <h2 style={{ margin: "0" }}>{loading ? "Loading..." : totals.totalUniqueIds}</h2>
+              <p style={{ margin: "0", color: "#888" }}>Total Users</p>
+            </div>
+          </div>
+          <div style={{ width: "100px", height: "100px" }}>
+            <CircularProgressbar value={loading ? 0 : totalUniqueIdsPercentage} text={`${loading ? 0 : totalUniqueIdsPercentage.toFixed(1)}%`} styles={buildStyles({
+              textSize: "12px", textColor: "#2196f3", pathColor: "#2196f3", trailColor: "#ddd"
+            })} />
+          </div>
+        </Box>
+      </Grid>
+
+      {/* User-specific Entries */}
+      <Grid item xs={12}>
+        <Box bgcolor="#f5f5f5" p="20px" borderRadius="8px" maxWidth={980}>
+          <Typography variant="h5" fontWeight="600" color="#333" mb="20px">
+            Last 10 Entries for {userData?.username || "User"}
+          </Typography>
+          <TableContainer component={Paper} sx={{ maxHeight: "340px" }}>
+            <Table stickyHeader>
+              <TableHead>
+                <TableRow>
+                  <TableCell>ID</TableCell>
+                  <TableCell>Business Name</TableCell>
+                  <TableCell>Door No</TableCell>
+                  <TableCell>City</TableCell>
+                  <TableCell>Pincode</TableCell>
+                  <TableCell>Mobile No</TableCell>
+                  <TableCell>Product</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {userEntries.map((entry) => (
+                  <TableRow key={entry.id}>
+                    <TableCell>{entry.id}</TableCell>
+                    <TableCell>{entry.businessname}</TableCell>
+                    <TableCell>{entry.doorno}</TableCell>
+                    <TableCell>{entry.city}</TableCell>
+                    <TableCell>{entry.pincode}</TableCell>
+                    <TableCell>{entry.mobileno}</TableCell>
+                    <TableCell>{entry.product}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Box>
+      </Grid>
+    </Grid>
+  );
+};
+
+export default DashBoard;

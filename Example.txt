@@ -1,0 +1,102 @@
+
+import React, { useState, useEffect } from "react";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import { Box, Button } from "@mui/material";
+import axios from "axios";
+
+const Datas = () => {
+  const [data, setData] = useState([]); // State to store the fetched data
+  const [loading, setLoading] = useState(true); // State to handle loading
+
+  // Fetch data from the API on component mount
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get("https://signpostphonebook.in/client_fetch.php"); // Replace with your API URL
+      setData(response.data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Define columns for the DataGrid
+  const columns = [
+    { field: "id", headerName: "ID", flex: 0.5 },
+    { field: "businessname", headerName: "Business Name", flex: 1 },
+    { field: "doorno", headerName: "Address", flex: 1 },
+    { field: "city", headerName: "City", flex: 1 },
+    { field: "pincode", headerName: "Pin Code", flex: 1 },
+    { field: "mobileno", headerName: "Mobile No", flex: 1 },
+    { field: "email", headerName: "Email", flex: 1 },
+    { field: "product", headerName: "Product", flex: 1 },
+    { field: "landline", headerName: "Landline", flex: 1 },
+    { field: "lcode", headerName: "LCode", flex: 0.5 },
+  ];
+
+  return (
+    <Box m="20px">
+      <h1 style={{ textAlign: "center", color: "#1976d2" }}>Datas</h1>
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={fetchData}
+        style={{ marginBottom: "10px" }}
+      >
+        Refresh Data
+      </Button>
+      <Box
+        height="75vh"
+        sx={{
+          "& .MuiDataGrid-root": {
+            border: "2px solid #1976d2",
+            borderRadius: "8px",
+            backgroundColor: "#f9f9f9",
+          },
+          "& .MuiDataGrid-columnHeaders": {
+            backgroundColor: "black",
+            color: "#1976d2",
+            fontSize: "16px",
+            fontWeight: "bold",
+          },
+          "& .MuiDataGrid-cell": {
+            borderBottom: "1px solid #ddd",
+          },
+          "& .MuiDataGrid-footerContainer": {
+            borderTop: "1px solid #ccc",
+            backgroundColor: "#1976d2",
+          },
+          "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
+            color: "blue",
+          },
+          "& .MuiCheckbox-root": {
+            color: "#1976d2",
+          },
+          "& .MuiDataGrid-row:hover": {
+            backgroundColor: "#e3f2fd",
+          },
+        }}
+      >
+        <DataGrid
+          rows={data}
+          columns={columns}
+          getRowId={(row) => row.id} // Ensure unique row ID
+          loading={loading}
+          components={{ Toolbar: GridToolbar }}
+          initialState={{
+            pagination: {
+              paginationModel: { pageSize: 10 },
+            },
+          }}
+          checkboxSelection
+        />
+      </Box>
+    </Box>
+  );
+};
+
+export default Datas;

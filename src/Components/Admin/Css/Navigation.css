@@ -1,0 +1,35 @@
+/* Drawer Navigation */
+.drawer {
+    position: fixed;
+    top: 0;
+    left: -250px;
+    width: 250px;
+    height: 100%;
+    background-color: #333;
+    color: #fff;
+    z-index: 1050;
+    transition: left 0.3s ease-in-out;
+  }
+  
+  .drawer-open {
+    left: 0;
+  }
+  
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1040;
+  }
+  
+  /* Hamburger icon for mobile */
+  .d-lg-none {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 1050;
+  }
+  
