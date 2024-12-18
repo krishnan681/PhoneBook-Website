@@ -80,6 +80,7 @@ function AboutPage() {
         Rs 4,500 (for Small)
       </p>
     </div>
+    
   );
 }
 
