@@ -22,7 +22,7 @@ Install Dependencies:
 1: Install the project dependencies by running:
 <h2>npm install </h2>
 
-2: The following packages will be installed as part of the project:
+2: The following packages should be installed as part of the project:
 
 - @mui/material: Material-UI  //components for building a modern interface.<br><br>
 - @mui/x-data-grid: //Advanced data grid components.<br><br>
