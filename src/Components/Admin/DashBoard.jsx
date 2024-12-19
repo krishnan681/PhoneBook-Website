@@ -218,13 +218,13 @@ const DashBoard = () => {
       </Grid>
 
       {/* Total Entry Table */}
-      <Grid item xs={12} sm={6} md={4}>
+      <Grid item xs={12} sm={6} md={4} >
         <Box className="total-entry-table" bgcolor="#f5f5f5" p="20px" borderRadius="8px" boxShadow={1}>
           <Typography variant="h6" fontWeight="600" color="#333" mb="15px">
             Total Entry Table
           </Typography>
-          <TableContainer component={Paper} sx={{ borderRadius: "8px" }}>
-            <Table>
+          <TableContainer component={Paper} sx={{ borderRadius: "8px", overflow:"auto", maxHeight:"340px" }}>
+            <Table stickyHeader >
               <TableHead>
                 <TableRow>
                   <TableCell sx={{ fontWeight: "bold" }}>S.No</TableCell>
