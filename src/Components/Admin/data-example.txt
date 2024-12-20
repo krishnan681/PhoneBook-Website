@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   DataGrid,
   GridToolbar
@@ -12,8 +12,10 @@ import {
   DialogTitle,
   TextField,
   Snackbar,
-  Alert
+  Alert,
+  IconButton
 } from "@mui/material";
+import ClearIcon from "@mui/icons-material/Clear";
 import axios from "axios";
 
 const Datas = () => {
@@ -38,6 +40,7 @@ const Datas = () => {
     lcode: "",
   }); // New row data for create
   const [snackbarOpen, setSnackbarOpen] = useState(false); // Snackbar state
+  const searchInputRef = useRef(null); // Reference for the search input
 
   // Fetch data from the API on component mount
   useEffect(() => {
@@ -69,6 +72,26 @@ const Datas = () => {
 
     setFilteredData(filtered);
   };
+
+  // Clear search and refresh data
+  const clearSearch = () => {
+    setSearchQuery("");
+    setFilteredData(data);
+  };
+
+  // Handle clicks outside of the search box
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (searchInputRef.current && !searchInputRef.current.contains(event.target)) {
+        clearSearch(); // Clear search and refresh data
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [data]);
 
   // Handle updating an existing row
   const handleUpdateRow = async () => {
@@ -132,36 +155,20 @@ const Datas = () => {
 
       {/* Search input */}
       <Box
-        sx={{
-          position: "relative",
-          display: "flex",
-          alignItems: "center",
-          width: "50vh",
-          marginBottom: "10px",
-        }}
+        ref={searchInputRef}
+        sx={{ display: "flex", alignItems: "center", marginBottom: "10px", width: "50vh" }}
       >
         <TextField
           label="Search"
           variant="outlined"
           value={searchQuery}
           onChange={handleSearchChange}
-          onBlur={() => setSearchQuery("")} // Clear the input when focus is lost
           fullWidth
         />
         {searchQuery && (
-          <Button
-            sx={{
-              position: "absolute",
-              right: 8,
-              padding: 0,
-              minWidth: "auto",
-              color: "gray",
-              "&:hover": { color: "black" },
-            }}
-            onClick={() => setSearchQuery("")} // Clear the search box when 'X' is clicked
-          >
-            X
-          </Button>
+          <IconButton onClick={clearSearch} sx={{ position: "absolute", right: 10 }}>
+            <ClearIcon />
+          </IconButton>
         )}
       </Box>
 
@@ -261,58 +268,6 @@ const Datas = () => {
           disableRowSelectionOnClick
         />
       </Box>
-
-      {/* Dialog for editing */}
-      <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
-        <DialogTitle>Edit Row</DialogTitle>
-        <DialogContent>
-          {Object.keys(newRow).map((key) => (
-            <TextField
-              key={key}
-              label={key.charAt(0).toUpperCase() + key.slice(1)}
-              value={editingRow ? editingRow[key] : newRow[key]}
-              onChange={(e) =>
-                setEditingRow({ ...editingRow, [key]: e.target.value })
-              }
-              fullWidth
-              margin="normal"
-            />
-          ))}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setOpenDialog(false)} color="secondary">
-            Cancel
-          </Button>
-          <Button onClick={handleUpdateRow} color="primary">
-            Update
-          </Button>
-        </DialogActions>
-      </Dialog>
-
-      {/* Confirmation Dialog for Deletion */}
-      <Dialog
-        open={deleteDialogOpen}
-        onClose={() => setDeleteDialogOpen(false)}
-      >
-        <DialogTitle>Confirm Deletion</DialogTitle>
-        <DialogContent>
-          Are you sure you want to delete this row? This action cannot be undone.
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => setDeleteDialogOpen(false)}
-            color="secondary"
-          >
-            Cancel
-          </Button>
-          <Button
-            onClick={handleDeleteRow}
-            color="error"
-          >
-            Delete
-          </Button>
-        </DialogActions>
-      </Dialog>
     </Box>
   );
 };

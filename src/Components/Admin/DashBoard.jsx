@@ -257,7 +257,7 @@ const DashBoard = () => {
             Last 10 Entries
           </Typography>
 
-          <TableContainer component={Paper} sx={{ maxHeight: "340px" }}>
+          <TableContainer component={Paper} sx={{ maxHeight: "340px",  }}>
             <Table stickyHeader>
               <TableHead>
                 <TableRow>
