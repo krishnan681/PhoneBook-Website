@@ -43,8 +43,10 @@ export default function App() {
             <Route path="/datas" element={<Datas />} />
             <Route path="/team" element={<Team />} />
             <Route path="/chat" element={<Chat />} />
+
           </Routes>
-        </Auth>        
+        </Auth>  
+
       </div>
     </div>
   );

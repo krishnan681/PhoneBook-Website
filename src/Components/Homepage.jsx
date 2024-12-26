@@ -11,15 +11,44 @@ import MarqueeWithLink from "../Components/MarqueeWithLink";
 import { useAuth } from "./Auth";
 import { useNavigate } from "react-router-dom";
 import "../Css/Homepage.css";
-import cone from '../assets/images/cone.jpg';
-import ctree from '../assets/images/ctree.jpg';
-import ctwo from '../assets/images/ctwo.jpg';
-import wallpaper1 from '../assets/images/wallpaper1.jpg';
-
-
+import Card from 'react-bootstrap/Card';
+ 
+import image1 from "../assets/images/image1.jpg";
+import image2 from "../assets/images/image2.jpg";
+import image3 from "../assets/images/image3.jpg";
+import image4 from "../assets/images/image4.jpg";
+import image5 from "../assets/images/image5.jpg";
+import image6 from "../assets/images/image6.jpg";
+import image7 from "../assets/images/image7.jpg";
+import image8 from "../assets/images/image8.jpg";
+import image9 from "../assets/images/image9.jpg";
+import image10 from "../assets/images/image10.jpg";
+import image11 from "../assets/images/image11.jpg";
+import image12 from "../assets/images/image12.jpg";
+import image13 from "../assets/images/image13.jpg";
+import image14 from "../assets/images/image14.jpg";
+import image15 from "../assets/images/image15.jpg";
+import image16 from "../assets/images/image16.jpg";
+import image17 from "../assets/images/image17.jpg";
+import image18 from "../assets/images/image18.jpg";
+import image19 from "../assets/images/image19.jpg";
+import image20 from "../assets/images/image20.jpg";
+import image21 from "../assets/images/image21.jpg";
+import image22 from "../assets/images/image22.jpg";
+import image23 from "../assets/images/image23.jpg";
+import image24 from "../assets/images/image24.jpg";
+import image25 from "../assets/images/image25.jpg";
+import image26 from "../assets/images/image26.jpg";
+import image27 from "../assets/images/image27.jpg";
+import image28 from "../assets/images/image28.jpg";
+import image29 from "../assets/images/image29.jpg";
+import image30 from "../assets/images/image30.jpg";
+ 
 
 
 export default function Homepage() {
+ 
+
   const [data, setData] = useState([]);
   const [isMobile, setIsMobile] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
@@ -29,6 +58,58 @@ export default function Homepage() {
     "I Saw Your Listing in SIGNPOST PHONE BOOK. I am Interested in your Products. Please Send Details/Call Me."
   );
   const encodedMessage = encodeURIComponent(messageTemplate);
+
+  const imagesForFirstCard = [image1, image2, image3, image4, image5];
+  const imagesForSecondCard = [image6, image7, image8, image9, image10];
+  const imagesForThirdCard = [image11, image12, image13, image14, image15];
+  const imagesForFourthCard = [image16, image17, image18, image19, image20];
+  const imagesForFifthCard = [image21, image22, image23, image24, image25];
+  const imagesForSixthCard = [image26, image27, image28, image29, image30];
+
+
+  const [currentImageIndexFirst, setCurrentImageIndexFirst] = useState(0);
+  const [currentImageIndexSecond, setCurrentImageIndexSecond] = useState(0);
+  const [currentImageIndexThird, setCurrentImageIndexThird] = useState(0);
+  const [currentImageIndexFourth, setCurrentImageIndexFourth] = useState(0);
+  const [currentImageIndexFifth, setCurrentImageIndexFifth] = useState(0);
+  const [currentImageIndexSixth, setCurrentImageIndexSixth] = useState(0);
+
+
+  const createSlideshowEffect = (setIndex, imageArray) => {
+    return setInterval(() => {
+      setIndex((prevIndex) => (prevIndex + 1) % imageArray.length);
+    }, 3000);
+  };
+
+  useEffect(() => {
+    const interval = createSlideshowEffect(setCurrentImageIndexFirst, imagesForFirstCard);
+    return () => clearInterval(interval);
+  }, [imagesForFirstCard.length]);
+
+  useEffect(() => {
+    const interval = createSlideshowEffect(setCurrentImageIndexSecond, imagesForSecondCard);
+    return () => clearInterval(interval);
+  }, [imagesForSecondCard.length]);
+
+  useEffect(() => {
+    const interval = createSlideshowEffect(setCurrentImageIndexThird, imagesForThirdCard);
+    return () => clearInterval(interval);
+  }, [imagesForThirdCard.length]);
+
+  useEffect(() => {
+    const interval = createSlideshowEffect(setCurrentImageIndexFourth, imagesForFourthCard);
+    return () => clearInterval(interval);
+  }, [imagesForFourthCard.length]);
+
+  useEffect(() => {
+    const interval = createSlideshowEffect(setCurrentImageIndexFifth, imagesForFifthCard);
+    return () => clearInterval(interval);
+  }, [imagesForFifthCard.length]);
+
+  useEffect(() => {
+    const interval = createSlideshowEffect(setCurrentImageIndexSixth, imagesForSixthCard);
+    return () => clearInterval(interval);
+  }, [imagesForSixthCard.length]);
 
   const { user } = useAuth();
 
@@ -350,50 +431,147 @@ export default function Homepage() {
             </div>
           </div>
         )}
+
       </div>
 
+ 
+<br/>
+<br/>
+<h2>View your Ads:</h2>
 
-      <div className="ads">
-  <h2>View your Ads:</h2>
+<div className="card-images" style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
 
-  <div id="cssportal-grid">
-  <div id="div1" style={{height:"70vh", width:"50vh" }}>
-    <img className="cone" src={cone} alt="Ad 1" />
-  </div>
-  <div id="div2" style={{height:"40vh", width:"50vh" }}>
-    <img className="cone" src={ctree} alt="Ad 2" />
-  </div>
-  <div id="div3" style={{height:"29vh", width:"100vh" }}>
-    <img className="cone" src={ctwo} alt="Ad 3" />
-  </div>
-  <div id="div4" >
-    <img className="cone" src={wallpaper1} alt="Ad 4" />
-  </div>
+<Card style={{ width: "20rem", height: "30rem", margin: "5px" }}>
+<Card.Img
+          variant="top"
+          src={imagesForFirstCard[currentImageIndexFirst]}
+          alt="Slideshow First Card"
+        />
+        <Card.Body>
+          <Card.Title>Full page size</Card.Title>
+          <Card.Text>
+            This is a slideshow that changes images automatically every 3 seconds.
+          </Card.Text>
+        </Card.Body>
+      </Card>
+
+
+
+<Card style={{ width: '28rem', height: '18rem', margin: '5px' }}>
+      <Card.Img
+          variant="top"
+          src={imagesForSecondCard[currentImageIndexSecond]}
+          alt="Slideshow Second Card"
+        />
+      <Card.Body>
+        <Card.Title>Card Title</Card.Title>
+        <Card.Text>
+          Some quick example text to build on the card title and make up the
+          bulk of the card's content.
+        </Card.Text>
+        
+      </Card.Body>
+    </Card>
+
+
+
+<Card style={{ width: '18rem', height: '18rem', margin: '5px' }}>
+<Card.Img
+          variant="top"
+          src={imagesForThirdCard[currentImageIndexThird]}
+          alt="Slideshow Third Card"
+        />
+      <Card.Body>
+        <Card.Title>Card Title</Card.Title>
+        <Card.Text>
+          Some quick example text to build on the card title and make up the
+          bulk of the card's content.
+        </Card.Text>
+        
+      </Card.Body>
+    </Card>
+
+
+
+<Card style={{ width: '28rem', height: '14rem', margin: '5px' }}>
+<Card.Img
+          variant="top"
+          src={imagesForFourthCard[currentImageIndexFourth]}
+          alt="Slideshow Fourth Card"
+        />
+      <Card.Body>
+        <Card.Title>Card Title</Card.Title>
+        <Card.Text>
+          Some quick example text to build on the card title and make up the
+          bulk of the card's content.
+        </Card.Text>
+        
+      </Card.Body>
+    </Card>
+
+
+
+<Card style={{ width: '48rem', height: '11rem', margin: '5px' }}>
+        <Card.Img
+          variant="top"
+          src={imagesForFifthCard[currentImageIndexFifth]}
+          alt="Slideshow Fifth Card"
+        />
+      <Card.Body>
+        <Card.Title>Card Title</Card.Title>
+        <Card.Text>
+          Some quick example text to build on the card title and make up the
+          bulk of the card's content.
+        </Card.Text>
+        
+      </Card.Body>
+    </Card>
+
+
+
+    <Card style={{ width: '28rem', height: '25rem', margin: '5px' }}>
+    <Card.Img
+          variant="top"
+          src={imagesForSixthCard[currentImageIndexSixth]}
+          alt="Slideshow Sixth Card"
+        />
+      <Card.Body>
+        <Card.Title>Card Title</Card.Title>
+        <Card.Text>
+          Some quick example text to build on the card title and make up the
+          bulk of the card's content.
+        </Card.Text>
+        
+      </Card.Body>
+    </Card>
+
+
+
+
+ 
 </div>
 
 
-  {/* <div className="parent">
-    <div id="div1">
-    <img className="cone" src={cone} alt="Ad 1" />
-    </div>
-    <div id="div2">
-    <img className="cone" src={ctree} alt="Ad 2" />
-    </div>
-    <div id="div3">
-    <img className="cone" src={ctwo} alt="Ad 3" />
-    </div>
-    <div id="div4">
-    <img className="cone" src={wallpaper1} alt="Ad 4" />
-    </div>
-  </div> */}
+
+
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+<br/>
+
+
+   
 </div>
 
-
-
-    </div>
-
-
-
-  
+   
   );
 }
