@@ -3,15 +3,18 @@ import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import '../Admin/Css/Team.css';
+import "../Admin/Css/Team.css";
 
 const Team = () => {
   const [teamData, setTeamData] = useState([]);
   const [calendarEvents, setCalendarEvents] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedMember, setSelectedMember] = useState(null);
+  const [isListModalOpen, setIsListModalOpen] = useState(false);
+  const [businessList, setBusinessList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Fetch team data from the backend
   const fetchTeamData = async () => {
     setIsLoading(true);
     try {
@@ -25,6 +28,7 @@ const Team = () => {
     }
   };
 
+  // Fetch calendar data for a specific member
   const fetchCalendarData = async (memberId) => {
     try {
       const response = await fetch(`https://signpostphonebook.in/fetch_events.php?id=${memberId}`);
@@ -37,6 +41,19 @@ const Team = () => {
       setCalendarEvents(events);
     } catch (error) {
       console.error("Error fetching calendar data:", error);
+    }
+  };
+
+  // Fetch business list data grouped by date for a specific member
+  const fetchBusinessList = async (memberId) => {
+    try {
+      const response = await fetch(`https://signpostphonebook.in/try_fetch_buisnessname.php?id=${memberId}`);
+      const text = await response.text();
+      console.log("Raw response:", text); // Log raw response to debug
+      const data = JSON.parse(text); // Parse JSON data
+      setBusinessList(data);
+    } catch (error) {
+      console.error("Error fetching business list:", error);
     }
   };
 
@@ -54,6 +71,18 @@ const Team = () => {
     setIsModalOpen(false);
     setSelectedMember(null);
     setCalendarEvents([]);
+  };
+
+  const openListModal = () => {
+    if (selectedMember) {
+      fetchBusinessList(selectedMember.id);
+      setIsListModalOpen(true);
+    }
+  };
+
+  const closeListModal = () => {
+    setIsListModalOpen(false);
+    setBusinessList([]);
   };
 
   if (isLoading) return <div>Loading...</div>;
@@ -79,6 +108,7 @@ const Team = () => {
                 <td>{member.total_count || "N/A"}</td>
                 <td>
                   <button
+                    style={{ backgroundColor: "none", border: "none" }}
                     onClick={() => openCalendarModal(member)}
                     aria-label={`Open calendar for ${member.name}`}
                   >
@@ -114,7 +144,34 @@ const Team = () => {
             <button onClick={closeCalendarModal} className="close-btn">
               Close
             </button>
-             
+            <button onClick={openListModal} className="list-btn">
+              List of {selectedMember.name}'s Data Entries
+            </button>
+          </div>
+        </div>
+      )}
+
+      {isListModalOpen && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <h3>Business List for {selectedMember?.name}</h3>
+            <div className="business-list">
+              {businessList && Object.keys(businessList).length > 0 ? (
+                Object.entries(businessList).map(([date, businesses]) => (
+                  <div key={date}>
+                    <h4>{date}</h4>
+                    {businesses.map((business, index) => (
+                      <p key={index}>{business}</p>
+                    ))}
+                  </div>
+                ))
+              ) : (
+                <p>No businesses found.</p>
+              )}
+            </div>
+            <button onClick={closeListModal} className="close-btn">
+              Close
+            </button>
           </div>
         </div>
       )}

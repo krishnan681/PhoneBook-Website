@@ -205,7 +205,14 @@ button {
 
 
 
+.MuiSvgIcon-root{
+  background-color: none;
+  color: green;
+  font-size: 1.5em;
+  cursor: pointer;
+  transition: color 0.3s ease;
 
+}
 
 
 
