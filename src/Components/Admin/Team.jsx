@@ -44,14 +44,22 @@ const Team = () => {
     }
   };
 
-  // Fetch business list data grouped by date for a specific member
+  // Fetch business list data for a specific member
   const fetchBusinessList = async (memberId) => {
     try {
       const response = await fetch(`https://signpostphonebook.in/try_fetch_buisnessname.php?id=${memberId}`);
       const text = await response.text();
-      console.log("Raw response:", text); // Log raw response to debug
+      console.log("business name's:", text); // Debug raw response
       const data = JSON.parse(text); // Parse JSON data
-      setBusinessList(data);
+      if (data.error) {
+        console.error(data.error);
+        setBusinessList([]);
+      } else if (data.message) {
+        console.log(data.message);
+        setBusinessList([]);
+      } else {
+        setBusinessList(data); // Set the list of business names
+      }
     } catch (error) {
       console.error("Error fetching business list:", error);
     }
@@ -156,14 +164,9 @@ const Team = () => {
           <div className="modal-content">
             <h3>Business List for {selectedMember?.name}</h3>
             <div className="business-list">
-              {businessList && Object.keys(businessList).length > 0 ? (
-                Object.entries(businessList).map(([date, businesses]) => (
-                  <div key={date}>
-                    <h4>{date}</h4>
-                    {businesses.map((business, index) => (
-                      <p key={index}>{business}</p>
-                    ))}
-                  </div>
+              {businessList && businessList.length > 0 ? (
+                businessList.map((business, index) => (
+                  <p key={index}>{business}</p>
                 ))
               ) : (
                 <p>No businesses found.</p>
