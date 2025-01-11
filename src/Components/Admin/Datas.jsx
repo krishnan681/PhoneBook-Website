@@ -206,6 +206,8 @@ const Datas = () => {
           },
         }}
       >
+
+{/* promocode */}
         <DataGrid
           rows={filteredData}
           columns={[
@@ -220,6 +222,7 @@ const Datas = () => {
             { field: "product", headerName: "Product", flex: 1 },
             { field: "landline", headerName: "Landline", flex: 1 },
             { field: "lcode", headerName: "LCode", flex: 0.5 },
+            { field: "promocode", headerName: "promocode", flex: 0.5 },
             {
               field: "actions",
               headerName: "Actions",

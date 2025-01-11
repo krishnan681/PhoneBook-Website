@@ -1,121 +1,465 @@
-/* Base Styles */
-.profile_Card_main {
-  font-family: "Arial", sans-serif;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
+/* General Reset */
+* {
   margin: 0;
-  background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+  padding: 0;
+  box-sizing: border-box;
 }
 
-/* Card Container */
-.Profile_card {
-  background: #fff;
-  display: flex;
-  flex-direction: column;
-  border-radius: 20px;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-  width: 300px;
-  padding: 20px;
+.user-profile {
+  font-family: Arial, sans-serif;
+  color: #333;
   text-align: center;
-  animation: fadeIn 1s ease-in-out;
+  margin: 0 auto;
 }
 
-/* Profile Image */
-.card-image {
+/* Profile Banner */
+.profile-banner {
   position: relative;
+  height: 200px;
+  background: url('../assets/images/sun-tornado.svg') no-repeat center center;
+  background-size: cover;
 }
 
-.profile-img {
+.profile-banner-overlay {
+  width: 100%;
+  height: 100%;
+}
+
+.member-btn {
+  position: absolute;
+  top: 30px;
+  right: 10px;
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.member-btn:hover {
+  background: #0056b3;
+}
+
+.profile-picture-container {
+  position: absolute;
+  bottom: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.profile-picture {
   width: 100px;
   height: 100px;
   border-radius: 50%;
-  object-fit: cover;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  margin: auto;
-  animation: scaleUp 0.8s ease-in-out;
+  border: 5px solid white;
 }
 
-/* Card Content */
-.card-content h2 {
-  margin: 10px 0 5px;
-  font-size: 1.5em;
-  color: #333;
-}
-
-.card-content p {
-  color: #777;
-  font-size: 0.9em;
-}
-
-.card-stats {
-  display: flex;
-  justify-content: space-around;
-  margin: 20px 0;
-}
-
-.card-stats div h3 {
-  margin: 0;
-  color: #333;
-}
-
-.card-stats div p {
-  margin: 0;
-  color: #999;
-}
-
-/* Buttons */
-.card-actions {
-  display: flex;
-  justify-content: space-around;
-}
-
-.btn {
-  padding: 10px 20px;
+.edit-picture-btn {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  background: #007bff;
+  color: white;
   border: none;
-  border-radius: 20px;
+  border-radius: 50%;
+  padding: 5px;
   cursor: pointer;
-  transition: all 0.3s ease-in-out;
+  font-size: 14px;
 }
 
-.follow-btn {
-  background: #ff7eb3;
-  color: #fff;
+/* Profile Details */
+.profile-details {
+  margin-top: 60px;
+  padding: 20px;
 }
 
-.follow-btn:hover {
-  background: #ff4d6d;
-  transform: scale(1.1);
+.profile-name {
+  font-size: 24px;
+  font-weight: bold;
 }
 
-.message-btn {
-  background: #e0e0e0;
+.profile-description {
+  font-size: 16px;
   color: #555;
 }
 
-.message-btn:hover {
-  background: #d6d6d6;
-  transform: scale(1.1);
+.profile-id {
+  font-size: 14px;
+  color: #777;
 }
 
-/* Animations */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
+.profile-stats h3 {
+  font-size: 18px;
+  color: #333;
+  margin: 20px 0;
+}
+
+/* Coupon Section */
+.coupon-section {
+  margin-top: 30px;
+  text-align: left;
+}
+
+.coupon-section h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.coupon-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+  text-align: left;
+}
+
+/* .coupon-card{
+  background: linear-gradient(135deg, #7158fe, #9d4de6);
+  color: #ff0000;
+  width: 300px;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+} */
+
+.coupon-card{
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  border-radius: 20px;
+  padding: 20px;
+  /* background-image: url('../assets/images/ctree.jpg'); */
+  /* background: linear-gradient(135deg, #7158fe, #9d4de6); */
+  background-color: #0056b3;
+  height: auto;
+  width: 300px;
+
+}
+
+.coupon-card .logo {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 15px;
+}
+
+.coupon-card h3 {
+  font-size: 16px;
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+
+.coupon-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 15px 0;
+}
+
+.coupon-row span {
+  display: inline-block;
+  padding: 10px 15px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px dashed #fff;
+  margin-right: -5px;
+}
+
+.coupon-row button {
+  background: white;
+  color: #7158fe;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s ease;
+}
+
+.coupon-row button:hover {
+  background: #7158fe;
+  color: white;
+}
+
+.coupon-card p {
+  font-size: 14px;
+  margin-top: 10px;
+}
+
+.circle1,
+.circle2 {
+  background: rgba(255, 255, 255, 0.1);
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  position: absolute;
+}
+
+.circle1 {
+  top: -20px;
+  left: -20px;
+}
+
+.circle2 {
+  bottom: -20px;
+  right: -20px;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .profile-picture {
+    width: 80px;
+    height: 80px;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+
+  .member-btn {
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+
+  .coupon-cards {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .coupon-card {
+    width: 90%;
+    margin: 0 auto;
+  }
+
+  .coupon-row span {
+    padding: 8px 12px;
+  }
+
+  .coupon-row button {
+    padding: 8px 12px;
   }
 }
 
-@keyframes scaleUp {
-  from {
-    transform: scale(0.8);
-  }
-  to {
-    transform: scale(1);
-  }
+/* 
+.modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  z-index: 10;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
 }
+
+.modal .modal-content {
+  overflow: hidden;
+  background: url(../assets/images/coupon1.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  color: #5c1717;
+  text-align: center;
+   
+}
+
+.modal-content .logo {
+  width: 80px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.modal-content h3 {
+  font-size: 28px;
+  font-weight: 400;
+  line-height: 40px;
+}
+
+.modal-content p {
+  font-size: 15px;
+}
+
+.modal-content .coupon-row {
+  display: flex;
+  align-items: center;
+  margin: 25px auto;
+  width: fit-content;
+}
+
+.modal-content #cpnCode {
+  border: 1px dashed #fff;
+  padding: 10px 20px;
+  border-right: 0;
+}
+
+.modal-content #cpnBtn {
+  border: 1px solid #fff;
+  background: #ffffff;
+  padding: 10px 20px;
+  top: -5px;
+  left: 6px;
+  position: relative;
+  color: #7158fe;
+  cursor: pointer;
+}
+
+.modal-content .circle1,
+.modal-content .circle2 {
+  background: #ffffff;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.modal-content .circle1 {
+  left: -25px;
+}
+
+.modal-content .circle2 {
+  right: -25px;
+}
+
+.modal-content .close {
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 24px;
+  color: #ffffff;
+  cursor: pointer;
+}
+  */
+
+
+
+  .modal {
+    overflow-x: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.7); /* Background overlay */
+    z-index: 9999;
+  }
+  
+  .modal-content {
+    
+    width: 90%;
+    max-width: 400px;
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    animation: slideDown 0.3s ease;
+  }
+  
+  @keyframes slideDown {
+    from {
+      transform: translateY(-20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  .modal-content.coupon-card {
+    overflow: hidden;
+    position: relative;
+    background: linear-gradient(135deg, #ff3c3c, #ff7c3c); /* Gradient red background */
+    padding: 20px;
+    color: #fff;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    border: 2px dashed #fff; /* Dotted border */
+  }
+  
+  .modal-content h3 {
+    font-size: 24px;
+    margin: 10px 0;
+  }
+  
+  .modal-content p {
+    font-size: 16px;
+    margin: 5px 0;
+  }
+  
+  .modal-content .coupon-row {
+    display: flex
+;
+    justify-content: space-evenly;
+    align-items: center;
+    margin: 25px 0  px;
+}
+  
+  #cpnCode {
+    font-weight: bold;
+    font-size: 18px;
+    background-color: #fff;
+    color: #ff3c3c;
+    padding: 5px 10px;
+    border-radius: 5px;
+    display: inline-block;
+  }
+  
+  #cpnBtn {
+    padding: 7.5px 11px;
+    background-color: #fff;
+    color: #ff3c3c;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    position: relative;
+    top: -5px;
+}
+  #cpnBtn:hover {
+    background-color: #ff7c3c;
+    color: #fff;
+  }
+  
+  .modal-content img.logo {
+    width: 80px;
+    margin: 10px auto;
+  }
+  
+  .modal-content .circle1,
+  .modal-content .circle2 {
+    position: absolute;
+    background-color: rgb(255, 255, 255);
+    border-radius: 50%;
+  }
+  
+  .modal-content .circle1 {
+    width: 50px;
+    height: 50px;
+    top: 140px;
+    left: -20px;
+  }
+  
+  .modal-content .circle2 {
+    width: 50px;
+    height: 50px;
+    bottom: 140px;
+    right: -20px;
+  }
+  
+  .close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    color: #fff;
+    background: transparent;
+    border: none;
+  }
+  
+  /* .close:hover {
+    color: #ff7c3c;
+  } */
+  

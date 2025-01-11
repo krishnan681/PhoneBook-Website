@@ -23,7 +23,7 @@ const DashBoard = () => {
   const [totalEntries, setTotalEntries] = useState([]); // New state for total entries
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [limit, setLimit] = useState(3000); // Default limit for calculating percentages
+  const [limit, setLimit] = useState(5000); // Default limit for calculating percentages
    
   // Fetch total records and unique IDs
   const fetchTotals = async () => {
@@ -108,14 +108,17 @@ const DashBoard = () => {
   useEffect(() => {
     fetchTotals();
     fetchLatestEntries();
-    fetchTotalEntries();  // Fetch total entries when the component loads
+    fetchTotalEntries();
+  
     const interval = setInterval(() => {
       fetchTotals();
       fetchLatestEntries();
-      fetchTotalEntries();  // Fetch total entries every 10 seconds
+      fetchTotalEntries();
     }, 10000);
+  
     return () => clearInterval(interval);
   }, []);
+  
 
   // Percentage calculations
   const totalRecordsPercentage = Math.min((totals.totalRecords / limit) * 100, 100);
@@ -238,7 +241,7 @@ const DashBoard = () => {
               </TableHead>
               <TableBody>
                 {totalEntries.map((entry, index) => (
-                  <TableRow key={entry.id}>
+                  <TableRow key={`${entry.id}-${index}`}>
                     <TableCell>{index + 1}</TableCell>
                     <TableCell>{entry.id}</TableCell>
                     <TableCell>{entry.name}</TableCell>
@@ -270,6 +273,7 @@ const DashBoard = () => {
                   <TableCell style={{ fontWeight: 'bold' }}>Pincode</TableCell>
                   <TableCell style={{ fontWeight: 'bold' }}>Mobile No</TableCell>
                   <TableCell style={{ fontWeight: 'bold' }}>Product</TableCell>
+                  <TableCell style={{ fontWeight: 'bold' }}>promocode</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -282,6 +286,7 @@ const DashBoard = () => {
                     <TableCell>{entry.pincode}</TableCell>
                     <TableCell>{entry.mobileno}</TableCell>
                     <TableCell>{entry.product}</TableCell>
+                    <TableCell>{entry.promocode}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
