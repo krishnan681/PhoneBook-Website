@@ -19,6 +19,7 @@ const UserProfile = () => {
   const [error, setError] = useState("");
   const [activeTab, setActiveTab] = useState("about"); // State for active tab
   const [showModal, setShowModal] = useState(false);
+  const [profileImage, setProfileImage] = useState(userData?.profileImage || UserLogo);
 
   // Update editableDetails when userData changes
   useEffect(() => {
@@ -142,6 +143,30 @@ const handleTabChange = (selectedTab) => {
   setActiveTab(selectedTab); // Update active tab
 };
 
+ // Handle image upload
+ const handleImageChange = async (event) => {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const formData = new FormData();
+  formData.append("profileImage", file);
+  formData.append("id", userData?.id);
+
+  try {
+    const response = await axios.post("https://signpostphonebook.in/upload_profile.php", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+
+    if (response.data.success) {
+      setProfileImage(response.data.imageUrl);
+      setUserData({ ...userData, profileImage: response.data.imageUrl });
+    } else {
+      console.error("Image upload failed", response.data.message);
+    }
+  } catch (error) {
+    console.error("Error uploading image", error);
+  }
+};
 
  
   
@@ -159,9 +184,11 @@ const handleTabChange = (selectedTab) => {
       >
         <div className="profile-header">
           <div className="profile-picture">
-            <div className="profile-circle">
-              <i className="fas fa-camera"></i>
-            </div>
+            <label htmlFor="profile-upload" className="profile-circle">
+              <img src={UserLogo} alt="Profile" className="profile-img" />
+              <i className="fas fa-camera overlay-icon"></i>
+            </label>
+            <input type="file" id="profile-upload" accept="image/*" style={{ display: "none" }} onChange={handleImageChange} />
           </div>
           <div className="profile-info" style={{ marginTop: "5vh" }}>
             <h3>{userData?.businessname || "Business Name Not Available"}</h3>
@@ -290,6 +317,9 @@ const handleTabChange = (selectedTab) => {
               ) : (
                 <div className="about-details">
                    
+                  <p>
+                    <strong>ID:</strong> {userData.id || "N/A"}
+                  </p>
                   <p>
                     <strong>Prefix:</strong> {userData.prefix || "N/A"}
                   </p>
