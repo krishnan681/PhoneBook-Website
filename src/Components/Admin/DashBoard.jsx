@@ -23,7 +23,7 @@ const DashBoard = () => {
   const [totalEntries, setTotalEntries] = useState([]); // New state for total entries
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [limit, setLimit] = useState(5000); // Default limit for calculating percentages
+  const [limit, setLimit] = useState(10000); // Default limit for calculating percentages
    
   // Fetch total records and unique IDs
   const fetchTotals = async () => {
@@ -127,7 +127,7 @@ const DashBoard = () => {
   return (
     <Grid container spacing={3} style={{ padding: "20px" }}>
       {/* Total Records and Total Users Boxes */}
-      <Grid item xs={12} sm={6} md={4}>
+      <Grid item xs={12} sm={6} md={4}>   
         <Box
           bgcolor="#f5f5f5"
           border="1px solid #ddd"

@@ -1,102 +1,1857 @@
+import React, { useEffect, useState } from "react";
+import { useAuth } from "./Auth";
+import "../Css/UserProfile.css";
+import userImage from '../assets/images/book_logo.png';
 
-import React, { useState, useEffect } from "react";
-import { DataGrid, GridToolbar } from "@mui/x-data-grid";
-import { Box, Button } from "@mui/material";
-import axios from "axios";
+const UserProfile = () => {
+  const [details, setDetails] = useState({});
+  const [error, setError] = useState("");
+  const [referralCount, setReferralCount] = useState(7);
+  const { userData } = useAuth();
+  const date = new Date().toISOString().split("T")[0];
+  const [modalData, setModalData] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-const Datas = () => {
-  const [data, setData] = useState([]); // State to store the fetched data
-  const [loading, setLoading] = useState(true); // State to handle loading
-
-  // Fetch data from the API on component mount
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        if (!userData?.id || !date) {
+          setError("Please provide a valid ID and Date.");
+          return;
+        }
+
+        const response = await fetch(
+          `https://signpostphonebook.in/data_entry_details.php?id=${userData.id}&date=${date}`
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP Error: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (data.status === "success") {
+          setDetails(data.data);
+          setError(""); // Clear any previous errors
+        } else {
+          setError(data.message || "Failed to fetch details.");
+        }
+      } catch (error) {
+        setError(error.message || "Something went wrong.");
+      }
+    };
+
     fetchData();
-  }, []);
-
-  const fetchData = async () => {
-    try {
-      const response = await axios.get("https://signpostphonebook.in/client_fetch.php"); // Replace with your API URL
-      setData(response.data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Define columns for the DataGrid
-  const columns = [
-    { field: "id", headerName: "ID", flex: 0.5 },
-    { field: "businessname", headerName: "Business Name", flex: 1 },
-    { field: "doorno", headerName: "Address", flex: 1 },
-    { field: "city", headerName: "City", flex: 1 },
-    { field: "pincode", headerName: "Pin Code", flex: 1 },
-    { field: "mobileno", headerName: "Mobile No", flex: 1 },
-    { field: "email", headerName: "Email", flex: 1 },
-    { field: "product", headerName: "Product", flex: 1 },
-    { field: "landline", headerName: "Landline", flex: 1 },
-    { field: "lcode", headerName: "LCode", flex: 0.5 },
-  ];
+  }, [userData, date]);
 
   return (
-    <Box m="20px">
-      <h1 style={{ textAlign: "center", color: "#1976d2" }}>Datas</h1>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={fetchData}
-        style={{ marginBottom: "10px" }}
-      >
-        Refresh Data
-      </Button>
-      <Box
-        height="75vh"
-        sx={{
-          "& .MuiDataGrid-root": {
-            border: "2px solid #1976d2",
-            borderRadius: "8px",
-            backgroundColor: "#f9f9f9",
-          },
-          "& .MuiDataGrid-columnHeaders": {
-            backgroundColor: "black",
-            color: "#1976d2",
-            fontSize: "16px",
-            fontWeight: "bold",
-          },
-          "& .MuiDataGrid-cell": {
-            borderBottom: "1px solid #ddd",
-          },
-          "& .MuiDataGrid-footerContainer": {
-            borderTop: "1px solid #ccc",
-            backgroundColor: "#1976d2",
-          },
-          "& .MuiDataGrid-toolbarContainer .MuiButton-text": {
-            color: "blue",
-          },
-          "& .MuiCheckbox-root": {
-            color: "#1976d2",
-          },
-          "& .MuiDataGrid-row:hover": {
-            backgroundColor: "#e3f2fd",
-          },
-        }}
-      >
-        <DataGrid
-          rows={data}
-          columns={columns}
-          getRowId={(row) => row.id} // Ensure unique row ID
-          loading={loading}
-          components={{ Toolbar: GridToolbar }}
-          initialState={{
-            pagination: {
-              paginationModel: { pageSize: 10 },
-            },
-          }}
-          checkboxSelection
-        />
-      </Box>
-    </Box>
+    <div className="header__wrapper">
+      <header></header>
+      <div className="cols__container">
+        <div className="left__col">
+          <div className="img__container">
+          <img
+            src={userImage}
+             
+          />
+            <span></span>
+          </div>
+          <h1 className="profile-name">{userData.businessname}</h1>
+          <p className="profile-description">{userData.product}</p>
+          <p className="profile-id">ID: {userData.id}</p>
+
+          <ul className="about">
+            <li>
+              <span>{details.followers || 0}</span> Data counts
+            </li>
+            <li>
+              <span>{details.following || 0}</span> Referals
+            </li>
+            
+          </ul>
+
+          <div className="content">
+            <p>
+              {details.bio ||
+                "Lorem ipsum dolor sit amet, consectetuer adipiscing elit."}
+            </p>
+            <ul>
+              <li>
+                <i className="fab fa-twitter"></i>
+              </li>
+              <li>
+                <i className="fab fa-pinterest"></i>
+              </li>
+              <li>
+                <i className="fab fa-facebook"></i>
+              </li>
+              <li>
+                <i className="fab fa-dribbble"></i>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div className="right__col">
+          <nav>
+            <ul>
+              <li>
+                <a href="#photos">About</a>
+              </li>
+              <li>
+                <a href="#galleries">Coupons</a>
+              </li>
+              <li>
+                <a href="#groups">Membership id card</a>
+              </li>
+               
+            </ul>
+             
+          </nav>
+
+          <div className="photos">
+            {details.photos?.map((photo, index) => (
+              <img key={index} src={photo} alt={`Photo ${index + 1}`} />
+            )) || (
+              <>
+                <img src="img/img_1.avif" alt="Placeholder" />
+                <img src="img/img_2.avif" alt="Placeholder" />
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 
-export default Datas;
+export default UserProfile;
+
+
+
+
+css for top 
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap");
+body {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  min-height: 100vh;
+  font-family: "Poppins", sans-serif;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
+a {
+  text-decoration: none;
+}
+
+.header__wrapper header {
+  width: 100%;
+  background: url("../assets/images/banner.png") no-repeat 50% 20% / cover;
+  min-height: calc(100px + 15vw);
+}
+
+.header__wrapper .cols__container .left__col {
+  padding: 25px 20px;
+  text-align: center;
+  max-width: 350px;
+  position: relative;
+  margin: 0 auto;
+}
+
+.header__wrapper .cols__container .left__col .img__container {
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  transform: translatex(-50%);
+}
+
+.header__wrapper .profile-name, .profile-description, .profile-id{
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: black;
+  position: relative;
+  top: 40px;
+}
+.header__wrapper .cols__container .left__col .img__container img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+  box-shadow: 1px 3px 12px rgba(0, 0, 0, 0.18);
+}
+.header__wrapper .cols__container .left__col .img__container span {
+  position: absolute;
+  background: #2afa6a;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  bottom: 3px;
+  right: 11px;
+  border: 2px solid #fff;
+}
+.header__wrapper .cols__container .left__col h2 {
+  margin-top: 60px;
+  font-weight: 600;
+  font-size: 22px;
+  margin-bottom: 5px;
+}
+.header__wrapper .cols__container .left__col p {
+  font-size: 0.9rem;
+  color: #818181;
+  margin: 0;
+}
+.header__wrapper .cols__container .left__col .about {
+  justify-content: space-around;
+  position: relative;
+  margin: 35px 0;
+}
+.header__wrapper .cols__container .left__col .about li {
+  display: flex;
+  flex-direction: column;
+  color: #818181;
+  font-size: 0.9rem;
+}
+.header__wrapper .cols__container .left__col .about li span {
+  color: #1d1d1d;
+  font-weight: 600;
+}
+.header__wrapper .cols__container .left__col .about:after {
+  position: absolute;
+  content: "";
+  bottom: -16px;
+  display: block;
+  background: #cccccc;
+  height: 1px;
+  width: 100%;
+}
+.header__wrapper .cols__container .content p {
+  font-size: 1rem;
+  color: #1d1d1d;
+  line-height: 1.8em;
+}
+.header__wrapper .cols__container .content ul {
+  gap: 30px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 25px;
+}
+.header__wrapper .cols__container .content ul li {
+  display: flex;
+}
+.header__wrapper .cols__container .content ul i {
+  font-size: 1.3rem;
+}
+.header__wrapper .cols__container .right__col nav {
+  display: flex;
+  align-items: center;
+  padding: 30px 0;
+  justify-content: space-between;
+  flex-direction: column;
+}
+.header__wrapper .cols__container .right__col nav ul {
+  display: flex;
+  gap: 20px;
+  flex-direction: column;
+}
+.header__wrapper .cols__container .right__col nav ul li a {
+  text-transform: uppercase;
+  color: #818181;
+}
+.header__wrapper .cols__container .right__col nav ul li:nth-child(1) a {
+  color: #1d1d1d;
+  font-weight: 600;
+}
+.header__wrapper .cols__container .right__col nav button {
+  background: #0091ff;
+  color: #fff;
+  border: none;
+  padding: 10px 25px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+.header__wrapper .cols__container .right__col nav button:hover {
+  opacity: 0.8;
+}
+.header__wrapper .cols__container .right__col .photos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 20px;
+}
+.header__wrapper .cols__container .right__col .photos img {
+  max-width: 100%;
+  display: block;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Responsiveness */
+
+@media (min-width: 868px) {
+  .header__wrapper .cols__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 90%;
+    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 50px;
+  }
+  .header__wrapper .cols__container .left__col {
+    padding: 25px 0px;
+  }
+  .header__wrapper .cols__container .right__col nav ul {
+    flex-direction: row;
+    gap: 30px;
+  }
+  .header__wrapper .cols__container .right__col .photos {
+    height: 365px;
+    overflow: auto;
+    padding: 0 0 30px;
+  }
+}
+
+@media (min-width: 1017px) {
+  .header__wrapper .cols__container .left__col {
+    margin: 0;
+    margin-right: auto;
+  }
+  .header__wrapper .cols__container .right__col nav {
+    flex-direction: row;
+  }
+  .header__wrapper .cols__container .right__col nav button {
+    margin-top: 0;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+orignal--
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import React, { useEffect, useState } from "react";
+import { useAuth } from "./Auth";
+import "../Css/UserProfile.css";
+
+const UserProfile = () => {
+  const [details, setDetails] = useState({});
+  const [error, setError] = useState("");
+  const [referralCount, setReferralCount] = useState(7); // State for referral count
+  const { userData } = useAuth();
+  const date = new Date().toISOString().split("T")[0];
+  const [modalData, setModalData] = useState(null); // State to manage modal data
+  const [isModalOpen, setIsModalOpen] = useState(false); // State to toggle modal
+
+  const fetchData = async () => {
+    try {
+      if (!userData?.id || !date) {
+        setError("Please provide a valid ID and Date.");
+        return;
+      }
+
+      const response = await fetch(
+        `https://signpostphonebook.in/data_entry_details.php?id=${userData.id}&date=${date}`
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP Error: ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (data.status === "success") {
+        setDetails(data.data);
+        setError(""); // Clear any previous errors
+      } else {
+        setError(data.message || "Failed to fetch details.");
+      }
+    } catch (error) {
+      setError(error.message || "Something went wrong.");
+    }
+  };
+
+  const fetchReferralCount = async () => {
+    try {
+      if (!userData?.mobileno) {
+        setError("Mobile number is required for fetching referral count.");
+        return;
+      }
+
+      const response = await fetch(
+        `https://signpostphonebook.in/user_referrals.php?mobileno=${userData.mobileno}`
+      );
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch referral count.");
+      }
+
+      const data = await response.json();
+
+      if (data.registered) {
+        setReferralCount(data.referral_count || 0); // Set referral count from the API response
+      } else {
+        setError(data.message || "No referral data found.");
+      }
+    } catch (error) {
+      setError(error.message || "Failed to fetch referral count.");
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+    fetchReferralCount();
+  }, []);
+
+  const openModal = (coupon) => {
+    setModalData(coupon);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalData(null);
+    setIsModalOpen(false);
+  };
+
+  return (
+    <div className="user-profile">
+      <div className="profile-banner">
+        <div className="profile-banner-overlay">
+          <div className="profile-picture-container">
+            <img
+              src="../assets/images/book_logo.png"
+              alt=""
+              className="profile-picture"
+            />
+            <button className="edit-picture-btn">📷</button>
+          </div>
+        </div>
+      </div>
+      <div className="profile-details">
+        <h1 className="profile-name">{userData.businessname}</h1>
+        <p className="profile-description">{userData.product}</p>
+        <p className="profile-id">ID: {userData.id}</p>
+        <div className="profile-stats">
+  <div className="stats-box">
+    <h3>Counts: {details.count || "No entries today..."}</h3>
+  </div>
+  <div className="stats-box">
+    <h3>Referral Count: {referralCount}</h3>
+  </div>
+</div>
+
+        <div className="coupon-section">
+          <h2>Coupons</h2>
+          <div className="coupon-cards">
+            {[...Array(4)].map((_, index) => {
+              const couponDetails = [
+                {
+                  title: "Flat 20% Off",
+                  description:
+                    "Get 20% off on all rides within the city using HDFC Credit Card.",
+                  code: "STEALDEAL20",
+                  validTill: "20th Jan, 2025",
+                  backgroundImage: "{../assets/images/coupn1.png}",
+                },
+                {
+                  title: "Buy 1 Get 1 Free",
+                  description:
+                    "Buy one coffee and get another free at participating outlets.",
+                  code: "COFFEELOVE",
+                  validTill: "15th Feb, 2025",
+                  backgroundImage: "../assets/images/coupon-2.png",
+                },
+                {
+                  title: "50% Off on Electronics",
+                  description:
+                    "Get 50% off on selected electronics using ICICI Debit Card.",
+                  code: "ELEC50",
+                  validTill: "10th March, 2025",
+                  backgroundImage: "../assets/images/coupon-3.png",
+                },
+                {
+                  title: "Free Delivery",
+                  description:
+                    "Enjoy free delivery on your next 5 orders with this code.",
+                  code: "FREEDEL",
+                  validTill: "30th Jan, 2025",
+                  backgroundImage: "../assets/images/coupon-4.png",
+                },
+              ];
+
+              const { title, description, code, validTill, backgroundImage } =
+                couponDetails[index];
+
+              return (
+                <div
+                  key={index}
+                  className="coupon-card"
+                  style={{
+                    backgroundImage: `url(${backgroundImage})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                  }}
+                  onClick={() =>
+                    openModal({
+                      title,
+                      description,
+                      code,
+                      validTill,
+                    })
+                  }
+                ></div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      {/* Modal */}
+      {isModalOpen && modalData && (
+        <div className="modal">
+          <div className="modal-content coupon-card">
+            <span className="close" onClick={closeModal}>
+              &times;
+            </span>
+            <img
+              src="../assets/images/book_logo.png"
+              alt="Coupon Logo"
+              className="logo"
+            />
+            <h3>{modalData.title}</h3>
+            <p>{modalData.description}</p>
+            <div className="coupon-row">
+              <span id="cpnCode">{modalData.code}</span>
+              <button
+                id="cpnBtn"
+                onClick={() => {
+                  navigator.clipboard.writeText(modalData.code);
+                  document.getElementById("cpnBtn").innerText = "COPIED";
+                  setTimeout(() => {
+                    document.getElementById("cpnBtn").innerText = "COPY CODE";
+                  }, 3000);
+                }}
+              >
+                COPY CODE
+              </button>
+            </div>
+            <p>Valid Till: {modalData.validTill}</p>
+            <div className="circle1"></div>
+            <div className="circle2"></div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default UserProfile;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ <div className="coupon-section">
+          <h2>Coupons</h2>
+          <div className="coupon-cards">
+            {[...Array(4)].map((_, index) => {
+              const couponDetails = [
+                {
+                  title: "Flat 20% Off",
+                  description:
+                    "Get 20% off on all rides within the city using HDFC Credit Card.",
+                  code: "STEALDEAL20",
+                  validTill: "20th Jan, 2025",
+                  backgroundImage: "{../assets/images/coupn1.png}",
+                },
+                {
+                  title: "Buy 1 Get 1 Free",
+                  description:
+                    "Buy one coffee and get another free at participating outlets.",
+                  code: "COFFEELOVE",
+                  validTill: "15th Feb, 2025",
+                  backgroundImage: "../assets/images/coupon-2.png",
+                },
+                {
+                  title: "50% Off on Electronics",
+                  description:
+                    "Get 50% off on selected electronics using ICICI Debit Card.",
+                  code: "ELEC50",
+                  validTill: "10th March, 2025",
+                  backgroundImage: "../assets/images/coupon-3.png",
+                },
+                {
+                  title: "Free Delivery",
+                  description:
+                    "Enjoy free delivery on your next 5 orders with this code.",
+                  code: "FREEDEL",
+                  validTill: "30th Jan, 2025",
+                  backgroundImage: "../assets/images/coupon-4.png",
+                },
+              ];
+
+              const { title, description, code, validTill, backgroundImage } =
+                couponDetails[index];
+
+              return (
+                <div
+                  key={index}
+                  className="coupon-card"
+                  style={{
+                    backgroundImage: `url(${backgroundImage})`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
+                  }}
+                  onClick={() =>
+                    openModal({
+                      title,
+                      description,
+                      code,
+                      validTill,
+                    })
+                  }
+                ></div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      {/* Modal */}
+      {isModalOpen && modalData && (
+        <div className="modal">
+          <div className="modal-content coupon-card">
+            <span className="close" onClick={closeModal}>
+              &times;
+            </span>
+            <img
+              src="../assets/images/book_logo.png"
+              alt="Coupon Logo"
+              className="logo"
+            />
+            <h3>{modalData.title}</h3>
+            <p>{modalData.description}</p>
+            <div className="coupon-row">
+              <span id="cpnCode">{modalData.code}</span>
+              <button
+                id="cpnBtn"
+                onClick={() => {
+                  navigator.clipboard.writeText(modalData.code);
+                  document.getElementById("cpnBtn").innerText = "COPIED";
+                  setTimeout(() => {
+                    document.getElementById("cpnBtn").innerText = "COPY CODE";
+                  }, 3000);
+                }}
+              >
+                COPY CODE
+              </button>
+            </div>
+            <p>Valid Till: {modalData.validTill}</p>
+            <div className="circle1"></div>
+            <div className="circle2"></div>
+          </div>
+        </div>
+      )}
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div className="left__col">
+          <div className="img__container">
+            <img src={userImage} alt={userData.businessname || "User Profile"} />
+            {/* <span></span> */}
+          </div>
+          <h1 className="profile-name">{userData.businessname}</h1>
+          <p className="profile-description">{userData.product}</p>
+          <p className="profile-id">ID: {userData.id}</p>
+
+          <ul className="about">
+            <li>
+              <span>{details.followers || 0}</span> Data counts
+            </li>
+            <li>
+              <span>{referralCount}</span> Referrals
+            </li>
+          </ul>
+
+          <div className="content">
+            <p>
+              {details.bio ||
+                "Lorem ipsum dolor sit amet, consectetuer adipiscing elit."}
+            </p>
+            <ul>
+              <li>
+                <i className="fab fa-twitter"></i>
+              </li>
+              <li>
+                <i className="fab fa-pinterest"></i>
+              </li>
+              <li>
+                <i className="fab fa-facebook"></i>
+              </li>
+              <li>
+                <i className="fab fa-dribbble"></i>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        --------------------------------------------orignal user profile page --------------------------------------------------------------------------------
+
+
+import React, { useEffect, useState } from "react";
+import { Tabs, Tab, Button, Form } from "react-bootstrap";
+import { useAuth } from "./Auth";
+import "../Css/UserProfile.css";
+import UserLogo from "../assets/images/profileimg-membership.png";
+import userImage from "../assets/images/book_logo.png";
+import "bootstrap/dist/css/bootstrap.min.css";
+import axios from "axios";
+import { Facebook, Twitter, Instagram, LinkedIn } from "@mui/icons-material";
+
+const UserProfile = () => {
+  const [error, setError] = useState("");
+  const { userData, setUserData } = useAuth(); // Assuming you have a context to set user data
+  const [isEditing, setIsEditing] = useState(false);
+  const [editableDetails, setEditableDetails] = useState(userData || {});
+  const [teamData, setTeamData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [referralCount, setReferralCount] = useState(0);
+  const [snackbarOpen, setSnackbarOpen] = useState(false); // For showing success notifications
+
+  // Fetch team data based on user ID to get the total count
+  const fetchTeamData = async () => {
+    setIsLoading(true);
+    try {
+      const response = await axios.get(
+        `https://signpostphonebook.in/try_totalcount.php?id=${userData.id}`
+      );
+      if (response.data?.total_count) {
+        setTeamData([{ total_count: response.data.total_count }]);
+      } else {
+        setTeamData([]);
+      }
+    } catch (error) {
+      console.error("Error fetching team data:", error);
+      setTeamData([]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Fetch referral count
+  const fetchReferralCount = async () => {
+    try {
+      if (!userData?.mobileno) {
+        setError("Mobile number is required for fetching referral count.");
+        return;
+      }
+      const response = await axios.get(
+        `https://signpostphonebook.in/user_referrals.php?mobileno=${userData.mobileno}`
+      );
+      if (response.data?.registered) {
+        setReferralCount(response.data.referral_count || 0);
+      } else {
+        setError(response.data.message || "No referral data found.");
+      }
+    } catch (error) {
+      setError(error.message || "Failed to fetch referral count.");
+    }
+  };
+
+  useEffect(() => {
+    fetchReferralCount();
+    fetchTeamData();
+  }, [userData]);
+
+  // Handle edit toggle
+  const toggleEdit = () => {
+    setIsEditing(!isEditing);
+  };
+
+  // Handle form changes
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setEditableDetails((prev) => ({ ...prev, [name]: value }));
+  };
+
+  // Handle form submission (Save changes)
+  const handleSave = async () => {
+    try {
+      const response = await axios.post(
+        "https://signpostphonebook.in/update_user_profile.php",
+        editableDetails
+      );
+
+      if (response.data.success) {
+        setUserData((prevData) => ({
+          ...prevData,
+          ...editableDetails,
+        }));
+
+        setEditableDetails((prevDetails) => ({
+          ...prevDetails,
+          ...editableDetails,
+        }));
+
+        setIsEditing(false); // Exit edit mode
+        setSnackbarOpen(true); // Show success snackbar
+        setError("");
+        console.log("Profile updated successfully:", response.data.message);
+      } else {
+        console.error("Failed to update profile:", response.data.message);
+        setError(response.data.message || "Failed to save changes.");
+      }
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      setError("Something went wrong. Please try again later.");
+    }
+  };
+
+  return (
+    <div className="header__wrapper">
+      <header></header>
+      <div className="cols__container">
+        <div className="left__col">
+          <div className="img__container">
+            <img
+              src={userImage}
+              alt={userData.businessname || "User Profile"}
+            />
+          </div>
+          <h1 className="profile-name">{userData.businessname}</h1>
+          <br />
+          <p className="profile-description">{userData.product}</p>
+          <br />
+          <ul className="about">
+            <li>
+              <span>
+                {isLoading
+                  ? "Loading..."
+                  : teamData.length > 0
+                  ? teamData[0].total_count || "No data"
+                  : "No data found"}
+              </span>
+              Data counts
+            </li>
+            <li>
+              <span>{referralCount}</span> Referrals
+            </li>
+          </ul>
+
+          <div className="bio-container">
+            <h4 style={{ fontSize: "17px" }}>Bio:</h4>
+            {isEditing ? (
+              <Form.Group controlId="formBio">
+                <Form.Label>Bio/Description</Form.Label>
+                <Form.Control
+                  as="textarea"
+                  rows={3}
+                  name="bio"
+                  value={editableDetails.bio || ""}
+                  onChange={handleChange}
+                />
+              </Form.Group>
+            ) : (
+              <p>{userData.bio || "N/A"}</p>
+            )}
+          </div>
+
+          <div className="social-media">
+            <a
+              href={userData.facebook || "#"}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="facebook-link"
+            >
+              <Facebook fontSize="large" style={{ color: "#4267B2" }} />
+            </a>
+            <a
+              href={userData.twitter || "#"}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="twitter-link"
+            >
+              <Twitter fontSize="large" style={{ color: "#1DA1F2" }} />
+            </a>
+            <a
+              href={userData.instagram || "#"}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="instagram-link"
+            >
+              <Instagram fontSize="large" style={{ color: "#C13584" }} />
+            </a>
+            <a
+              href={userData.linkedin || "#"}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="linkedin-link"
+            >
+              <LinkedIn fontSize="large" style={{ color: "#0A66C2" }} />
+            </a>
+          </div>
+        </div>
+
+        <div className="right__col">
+          <Tabs defaultActiveKey="about" id="user-profile-tabs" className="mb-3">
+            <Tab eventKey="about" title="About">
+              {isEditing ? (
+                <Form>
+                  <Form.Group controlId="formName">
+                    <Form.Label>Name</Form.Label>
+                    <Form.Control
+                      type="text"
+                      name="businessname"
+                      value={editableDetails.businessname || ""}
+                      onChange={handleChange}
+                    />
+                  </Form.Group>
+                  <Form.Group controlId="formUserId">
+                    <Form.Label>User ID</Form.Label>
+                    <Form.Control
+                      type="text"
+                      name="id"
+                      value={editableDetails.id || ""}
+                      disabled
+                    />
+                  </Form.Group>
+                  <Form.Group controlId="formEmail">
+                    <Form.Label>Email</Form.Label>
+                    <Form.Control
+                      type="email"
+                      name="email"
+                      value={editableDetails.email || ""}
+                      onChange={handleChange}
+                    />
+                  </Form.Group>
+                  <Form.Group controlId="formPhoneNumber">
+                    <Form.Label>Phone Number</Form.Label>
+                    <Form.Control
+                      type="text"
+                      name="mobileno"
+                      value={editableDetails.mobileno || ""}
+                      onChange={handleChange}
+                    />
+                  </Form.Group>
+                  <Form.Group controlId="formAddress">
+                    <Form.Label>Address</Form.Label>
+                    <Form.Control
+                      type="text"
+                      name="address"
+                      value={editableDetails.address || ""}
+                      onChange={handleChange}
+                    />
+                  </Form.Group>
+
+                  <Button variant="primary" onClick={handleSave} className="mt-3">
+                    Save
+                  </Button>
+                  <Button
+                    variant="secondary"
+                    onClick={toggleEdit}
+                    className="mt-3 ms-2"
+                  >
+                    Cancel
+                  </Button>
+                </Form>
+              ) : (
+                <div>
+                  <p>
+                    <strong>Name:</strong> {userData.businessname || "N/A"}
+                  </p>
+                  <p>
+                    <strong>User ID:</strong> {userData.id || "N/A"}
+                  </p>
+                  <p>
+                    <strong>Email:</strong> {userData.email || "N/A"}
+                  </p>
+                  <p>
+                    <strong>Phone Number:</strong> {userData.mobileno || "N/A"}
+                  </p>
+                  <p>
+                    <strong>Address:</strong> {userData.doorno || "N/A"}
+                  </p>
+
+                  <Button variant="primary" onClick={toggleEdit}>
+                    Edit Profile
+                  </Button>
+                </div>
+              )}
+            </Tab>
+            <Tab eventKey="coupons" title="Coupons">
+              <div className="coupons-section">
+                <h4>Available Coupons</h4>
+                <div className="coupon">
+                  <h5>50% Off on First Purchase</h5>
+                  <p>Use code: <strong>FIRST50</strong></p>
+                  <p>Valid until: 31st January 2025</p>
+                </div>
+                <div className="coupon">
+                  <h5>Buy 1 Get 1 Free</h5>
+                  <p>Use code: <strong>BOGO2025</strong></p>
+                  <p>Valid until: 15th February 2025</p>
+                </div>
+                <div className="coupon">
+                  <h5>₹100 Off on Orders Above ₹500</h5>
+                  <p>Use code: <strong>SAVE100</strong></p>
+                  <p>Valid until: 28th February 2025</p>
+                </div>
+              </div>
+            </Tab>
+
+
+            
+            <Tab eventKey="membership" title="Membership ID Card">
+              <div className="membership-card-container">
+                <div className="membership-card">
+                  <div className="card-front">
+                    <div className="logo-container">
+                      <img src={userImage} className="membership-logo" alt="Logo" />
+                    </div>
+                    
+                    <div className="head">
+                      <h4>Signpost Celfon.in Technology</h4>
+                    </div>
+
+                    <div className="sub-head">
+                      <h4>Membership ID Card</h4>
+                    </div>
+
+                    <div className="profile-card">
+                      <img src={UserLogo} alt="Profile" />
+                    </div>
+
+                    <div className="card-content">
+                      <p className="membership-name">
+                        Name: {userData.businessname || "N/A"}
+                      </p>
+                      <p className="membership-id">User ID: {userData.id || "N/A"}</p>
+                      <p className="expiry-date">Expiry Date: 31-Dec-2025</p>
+                    </div>
+                  </div>
+
+       
+                  <div className="card-back">
+                    <h4>Membership Benefits</h4>
+                    <ul>
+                      <li>✔ Access to exclusive content</li>
+                      <li>✔ Priority customer support</li>
+                      <li>✔ Discounts on services and products</li>
+                      <li>✔ Invitations to special events</li>
+                    </ul>
+                    <p className="visit-text">Visit our Store to collect books and make sure to visit our E-Books.</p>
+                  </div>
+                </div>
+              </div>
+            </Tab>
+
+
+
+          </Tabs>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default UserProfile;
+
+
+-------------------------------------css for the above code ---------------------------------------------
+
+
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap");
+body {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  min-height: 100vh;
+  font-family: "Poppins", sans-serif;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+}
+
+a {
+  text-decoration: none;
+}
+
+.header__wrapper header {
+  width: 100%;
+  background: url("../assets/images/banner.png") no-repeat 50% 20% / cover;
+  min-height: calc(100px + 7vw);
+}
+
+.header__wrapper .cols__container .left__col {
+  padding: 25px 20px;
+  text-align: center;
+  max-width: 350px;
+  position: relative;
+  margin: 0 auto;
+}
+
+.header__wrapper .cols__container .left__col .img__container {
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  transform: translatex(-50%);
+}
+
+.header__wrapper .profile-name, .profile-description, .profile-id{
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: black;
+  position: relative;
+  top: 40px;
+}
+.header__wrapper .cols__container .left__col .img__container img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+  box-shadow: 1px 3px 12px rgba(0, 0, 0, 0.18);
+}
+.header__wrapper .cols__container .left__col .img__container span {
+  position: absolute;
+  background: #2afa6a;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  bottom: 3px;
+  right: 11px;
+  border: 2px solid #fff;
+}
+.header__wrapper .cols__container .left__col h2 {
+  margin-top: 60px;
+  font-weight: 600;
+  font-size: 22px;
+  margin-bottom: 5px;
+}
+.header__wrapper .cols__container .left__col p {
+  font-size: 0.9rem;
+  color: #818181;
+  margin: 0;
+}
+.header__wrapper .cols__container .left__col .about {
+  justify-content: space-around;
+  position: relative;
+  margin: 35px 0;
+}
+.header__wrapper .cols__container .left__col .about li {
+  display: flex;
+  flex-direction: column;
+  color: #818181;
+  font-size: 0.9rem;
+}
+.header__wrapper .cols__container .left__col .about li span {
+  color: #1d1d1d;
+  font-weight: 600;
+}
+.header__wrapper .cols__container .left__col .about:after {
+  position: absolute;
+  content: "";
+  bottom: -16px;
+  display: block;
+  background: #cccccc;
+  height: 1px;
+  width: 100%;
+}
+.header__wrapper .cols__container .content p {
+  font-size: 1rem;
+  color: #1d1d1d;
+  line-height: 1.8em;
+}
+.header__wrapper .cols__container .content ul {
+  gap: 30px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 25px;
+}
+.header__wrapper .cols__container .content ul li {
+  display: flex;
+}
+.header__wrapper .cols__container .content ul i {
+  font-size: 1.3rem;
+}
+.header__wrapper .cols__container .right__col nav {
+  display: flex;
+  align-items: center;
+  padding: 30px 0;
+  justify-content: space-between;
+  flex-direction: column;
+}
+.header__wrapper .cols__container .right__col nav ul {
+  display: flex;
+  gap: 20px;
+  flex-direction: column;
+}
+.header__wrapper .cols__container .right__col nav ul li a {
+  text-transform: uppercase;
+  color: #818181;
+}
+.header__wrapper .cols__container .right__col nav ul li:nth-child(1) a {
+  color: #1d1d1d;
+  font-weight: 600;
+}
+.header__wrapper .cols__container .right__col nav button {
+  background: #0091ff;
+  color: #fff;
+  border: none;
+  padding: 10px 25px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+.header__wrapper .cols__container .right__col nav button:hover {
+  opacity: 0.8;
+}
+.header__wrapper .cols__container .right__col .photos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 20px;
+}
+.header__wrapper .cols__container .right__col .photos img {
+  max-width: 100%;
+  display: block;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Responsiveness */
+
+@media (min-width: 868px) {
+  .header__wrapper .cols__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 90%;
+    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 50px;
+  }
+  .header__wrapper .cols__container .left__col {
+    padding: 25px 0px;
+  }
+  .header__wrapper .cols__container .right__col nav ul {
+    flex-direction: row;
+    gap: 30px;
+  }
+  .header__wrapper .cols__container .right__col .photos {
+    height: 365px;
+    overflow: auto;
+    padding: 0 0 30px;
+  }
+}
+
+@media (min-width: 1017px) {
+  .header__wrapper .cols__container .left__col {
+    margin: 0;
+    margin-right: auto;
+  }
+  .header__wrapper .cols__container .right__col nav {
+    flex-direction: row;
+  }
+  .header__wrapper .cols__container .right__col nav button {
+    margin-top: 0;
+  }
+}
+
+
+
+
+
+
+
+
+/* Styling for Tabs */
+.nav-tabs {
+  border-bottom: 2px solid #ccc;
+  justify-content: center;
+  display: flex;
+  gap: 30px;
+  margin-top: 30px;
+}
+
+.nav-tabs .nav-link {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #818181;
+  border: none;
+  border-bottom: 2px solid transparent;
+  padding: 10px 15px;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+}
+
+.nav-tabs .nav-link.active {
+  color: #1d1d1d;
+  border-bottom: 2px solid #0091ff;
+}
+
+.nav-tabs .nav-link:hover {
+  color: #1d1d1d;
+  border-bottom: 2px solid #0091ff;
+  background: transparent;
+}
+
+/* Tab Content Styling */
+.tab-content {
+  margin-top: 20px;
+  font-size: 1rem;
+  color: #1d1d1d;
+  line-height: 1.8em;
+}
+
+.tab-content p {
+  padding: 15px;
+  /* background: #f9f9f9; */
+  border-radius: 4px;
+  /* box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); */
+}
+
+
+
+.header__wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.cols__container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  width: 90%;
+  max-width: 1200px;
+}
+
+.left__col {
+  flex: 1;
+  min-width: 280px;
+  margin: 10px;
+  text-align: center;
+}
+
+.img__container {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin: 0 auto;
+}
+
+.img__container img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+.profile-name {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.profile-id {
+  color: #888;
+  font-size: 0.9rem;
+}
+
+.about {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+}
+
+.about li {
+  list-style: none;
+  font-size: 1rem;
+}
+
+.about li span {
+  font-weight: bold;
+  display: block;
+}
+
+.bio-container {
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #f9f9f9;
+  text-align: left;
+}
+
+.social-media {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  gap: 15px;
+}
+
+.social-media a {
+  display: block;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  /* background: #ddd; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+
+.social-media a.facebook {
+  background: #3b5998;
+}
+
+.social-media a.twitter {
+  background: #1da1f2;
+}
+
+.social-media a.instagram {
+  background: #c13584;
+}
+
+.right__col {
+  flex: 2;
+  min-width: 280px;
+  margin: 10px;
+}
+
+@media (max-width: 768px) {
+  .cols__container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .about {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+
+
+
+
+
+
+.coupons-section {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.coupons-section h4 {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  color: #333;
+  text-align: center;
+}
+
+.coupon {
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.coupon:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.coupon h5 {
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+  color: #2c3e50;
+}
+
+.coupon p {
+  font-size: 0.9rem;
+  margin: 0 0 5px;
+  color: #555;
+}
+
+.coupon strong {
+  font-weight: 600;
+  color: #e74c3c;
+}
+
+.coupon:last-child {
+  margin-bottom: 0;
+}
+
+
+
+
+
+
+
+
+
+.membership-card {
+  height: 50vh;
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
+  margin: 20px auto;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #dfe9f3, #ffffff) ;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.6s ease-in-out;
+}
+
+.membership-card:hover {
+  transform: rotateY(180deg);
+}
+
+.card-front .head{
+  padding: 10px;
+  border-radius: 12px 12px 0 0;
+  position: relative;
+  top: -13vh;
+
+}
+.card-front .sub-head{
+  padding: 10px;
+  border-radius: 12px 12px 0 0;
+  position: relative;
+  top: -13vh;
+
+}
+
+
+.card-front .profile-card{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-radius: 12px 12px 0 0;
+  position: relative;
+  top: -6vh;
+}
+
+
+.card-front .card-content{
+  padding: 10px;
+  border-radius: 12px 12px 0 0;
+  position: relative;
+  top: -30vh;
+  left: 26vh;
+  max-width: 39vh;
+  font-weight: 600;
+
+}
+
+
+.card-front,
+.card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.card-front {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card-back {
+  background-color: #1d1d1d;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transform: rotateY(180deg);
+  text-align: center;
+  padding: 20px;
+}
+
+.card-back h4 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  color: #ffd700;
+}
+
+.card-back ul {
+  list-style: none;
+  padding: 0;
+  font-size: 1rem;
+  color: #ffffff;
+}
+
+.card-back ul li {
+  margin: 10px 0;
+  font-size: 1rem;
+}
+
+.card-back .visit-text {
+  margin-top: 20px;
+  font-size: 0.9rem;
+  color: #ccc;
+  font-style: italic;
+}
+
+.logo-container img {
+  max-width: 80px;
+  height: auto;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+}
+
+.profile-card img {
+  width: 15%;
+ 
+  border-radius: 10px;
+}
+
+.head h4,
+.sub-head h4 {
+  text-align: center;
+  color: #6a1b9a;
+}
+
+.card-content {
+  font-size: 1rem;
+  color: #333;
+}
+
+.membership-card-container {
+  perspective: 1000px;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .membership-card {
+    height: 60vh;
+    width: 90%;
+  }
+
+  .card-back ul li {
+    font-size: 0.9rem;
+  }
+
+  .card-back h4 {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .membership-card {
+    padding: 10px;
+    height: 70vh;
+  }
+
+  .card-back ul li {
+    font-size: 0.8rem;
+  }
+
+  .card-back h4 {
+    font-size: 1rem;
+  }
+
+  .card-back .visit-text {
+    font-size: 0.8rem;
+  }
+}
+
+
+
+--------------------------------------end of user profile-----------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ // Fetch referral count based on user mobile number
+  const fetchReferralCount = async () => {
+    try {
+      if (!userData?.mobileno) {
+        setError("Mobile number is required for fetching referral count.");
+        return;
+      }
+  
+      const response = await fetch(
+        `https://signpostphonebook.in/try_referrals_count.php?mobile=${encodeURIComponent(userData.mobileno)}`
+      );
+  
+      if (!response.ok) {
+        throw new Error("Failed to fetch referral count.");
+      }
+  
+      const data = await response.text(); // Fetch response as text
+  
+      const match = data.match(/Total Referred: (\d+)/); // Extract number from response
+  
+      if (match) {
+        setReferralCount(parseInt(match[1], 10)); // Set extracted referral count
+      } else {
+        setError("No referral data found.");
+      }
+    } catch (error) {
+      setError(error.message || "Failed to fetch referral count.");
+    }
+  };
+  

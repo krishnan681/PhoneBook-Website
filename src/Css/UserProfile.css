@@ -1,465 +1,881 @@
-/* General Reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 .user-profile {
+  max-width: 200vh;
+  margin: auto;
+  padding: 20px;
   font-family: Arial, sans-serif;
-  color: #333;
-  text-align: center;
-  margin: 0 auto;
-}
-
-/* Profile Banner */
-.profile-banner {
+  /* border: 1px solid #ccc; */
+  border-radius: 8px;
   position: relative;
-  height: 200px;
-  background: url('../assets/images/sun-tornado.svg') no-repeat center center;
-  background-size: cover;
+  top: 5vh;
+  height: auto;
+  /* background-color: #f9f9f9; */
 }
 
-.profile-banner-overlay {
-  width: 100%;
-  height: 100%;
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
-.member-btn {
-  position: absolute;
+
+.tabs-wrapper{
+  margin-bottom: -25px;
+}
+
+/* Tabs line */
+.tab-line {
+  position: relative;
+  top:5px;
+  border-top: 2px solid #007bff;
+}
+
+/* Profile header icons */
+.social-icons {
+  display: flex;
+  gap: 8px;
+  margin-right: 12px;
+}
+
+.social-icons i {
+  font-size: 18px;
+  color: #007bff;
+  cursor: pointer;
+}
+
+.social-icons i:hover {
+  color: #0056b3;
+}
+
+
+
+.profile-picture {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100px;
+  height: 100px;
+  background-color: #e0e0e0;
+  border-radius: 50%;
+}
+
+.profile-circle {
+  width: 30px;
+  height: 30px;
+  position: relative;
   top: 30px;
-  right: 10px;
-  background: #007bff;
-  color: white;
-  border: none;
+  left: 30px;
+  /* border: 1px solid black; */
+  background-color: #fff;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.profile-info {
+  flex-grow: 1;
+  margin-left: 20px;
+}
+
+.profile-info h3 {
+  margin: 0;
+}
+
+.profile-info p {
+  margin: 5px 0;
+}
+
+.profile-actions button {
+  margin: 0 5px;
+  font-size: 16px; /* Default size */
+  padding: 10px 20px; /* Default padding */
+}
+
+@media screen and (max-width: 768px) {
+  .profile-actions button {
+     padding: 5px 5px;
+     font-size: 12px;
+
+  }
+}
+
+.profile-tabs {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+   
+}
+
+.profile-tabs button {
   padding: 10px 15px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.profile-tabs button:hover {
+  background-color: #f0f0f0;
+}
+
+.profile-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.profile-details textarea {
+  width: 100%;
+  height: 100px;
+}
+
+.edit-btn {
+  margin-left: 20px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.edit-btn:hover {
+  background-color: #0056b3;
+}
+
+
+.profile-tabs {
+  margin: 20px 0;
+  justify-content: start;
+  display: flex;
+  gap: 10px;
+}
+
+.profile-tabs .nav-link {
+  padding: 10px 20px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  color: #333;
+}
+
+.profile-tabs .nav-link.active {
+  background-color: #007bff;
+  color: white;
+}
+
+.about-edit-form{
+  width: 20px;
+}
+ 
+.about-edit-form, .about-details {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.about-details .edit-btn {
+  width: 200px;
+  margin: 0 auto;
+   
+}
+
+
+
+.about-details p{
+  background-color: #f2f3f3;
+  margin: 10px;
+  padding: 5px 5px;
+  border-radius: 5px;
+  
+
+}
+
+.about-container h4 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.about-container p {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: center;
+}
+
+.about-container button {
+  width: 48%;
+}
+
+.error {
+  color: red;
+  font-size: 0.9rem;
+  text-align: center;
+  margin-top: 10px;
+}
+
+@media (max-width: 768px) {
+  .about-container {
+    padding: 15px;
+  }
+
+  .about-container p {
+    font-size: 0.9rem;
+  }
+
+  .about-container button {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+  }
+}
+
+
+
+
+
+
+
+.sub-tab{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+    
+  }
+}
+
+
+
+.starter-plan-card {
+   
+  width: 100%;
+  max-width: 400px;
+  margin: 20px auto;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.plan-header {
+  background-color: #ffcdd2;
+  color: #b71c1c;
+  text-align: center;
+  padding: 20px;
+}
+
+.plan-header:nth-child(1) {
+  background-color: #ffe082; /* Yellow for Monthly */
+  color: #f57f17;
+}
+
+.plan-header:nth-child(2) {
+  background-color: #c8e6c9; /* Green for Yearly */
+  color: #2e7d32;
+}
+
+.plan-header h5 {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.plan-price {
+  font-size: 1.2rem;
+  margin-top: 10px;
+}
+
+.plan-body {
+  padding: 20px;
+  text-align: center;
+}
+
+.plan-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px;
+}
+
+.plan-features li {
+  font-size: 1rem;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.plan-features i {
+  margin-right: 10px;
+}
+
+.fa-check-circle {
+  color: #28a745; /* Green checkmark */
+}
+
+.fa-times-circle {
+  color: #dc3545; /* Red cross */
+}
+
+.subscribe-btn {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
   border-radius: 5px;
   cursor: pointer;
 }
 
-.member-btn:hover {
-  background: #0056b3;
+.subscribe-btn:hover {
+  background-color: #0056b3;
 }
 
-.profile-picture-container {
-  position: absolute;
-  bottom: -50px;
-  left: 50%;
-  transform: translateX(-50%);
-}
 
-.profile-picture {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  border: 5px solid white;
-}
 
-.edit-picture-btn {
-  position: absolute;
-  bottom: 5px;
-  right: 5px;
-  background: #007bff;
-  color: white;
-  border: none;
-  border-radius: 50%;
-  padding: 5px;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-/* Profile Details */
-.profile-details {
-  margin-top: 60px;
+/* User Profile */
+.user-profile {
+  max-width: 1200px;
+  margin: auto;
   padding: 20px;
+  font-family: Arial, sans-serif;
+  border-radius: 8px;
+  position: relative;
+  top: 5vh;
 }
 
-.profile-name {
-  font-size: 24px;
-  font-weight: bold;
+.profile-header {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 10px 50px;
 }
 
-.profile-description {
-  font-size: 16px;
-  color: #555;
+/* Profile Picture */
+.profile-picture {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  background-color: #e0e0e0;
+  border-radius: 50%;
 }
 
-.profile-id {
-  font-size: 14px;
-  color: #777;
+/* Profile Info */
+.profile-info {
+  /* flex: 1 1 300px; */
+  margin-left: 20px;
 }
 
-.profile-stats h3 {
+.profile-info h3 {
+  margin: 0;
   font-size: 18px;
-  color: #333;
+  font-weight: 600;
+}
+
+.profile-info p {
+  margin: 5px 0;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+/* Tabs */
+.profile-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: start;
+  gap: 10px;
   margin: 20px 0;
 }
 
-/* Coupon Section */
-.coupon-section {
-  margin-top: 30px;
-  text-align: left;
-}
-
-.coupon-section h2 {
-  font-size: 20px;
-  margin-bottom: 10px;
-}
-
-.coupon-cards {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: center;
-  text-align: left;
-}
-
-/* .coupon-card{
-  background: linear-gradient(135deg, #7158fe, #9d4de6);
-  color: #ff0000;
-  width: 300px;
-  padding: 20px;
-  border-radius: 15px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-  position: relative;
-  overflow: hidden;
+.profile-tabs .nav-link {
+  padding: 10px 15px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  color: #333;
   text-align: center;
-} */
-
-.coupon-card{
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-  border-radius: 20px;
-  padding: 20px;
-  /* background-image: url('../assets/images/ctree.jpg'); */
-  /* background: linear-gradient(135deg, #7158fe, #9d4de6); */
-  background-color: #0056b3;
-  height: auto;
-  width: 300px;
-
 }
 
-.coupon-card .logo {
-  width: 60px;
-  height: 60px;
-  margin-bottom: 15px;
-}
-
-.coupon-card h3 {
-  font-size: 16px;
-  margin-bottom: 10px;
-  line-height: 1.5;
-}
-
-.coupon-row {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 15px 0;
-}
-
-.coupon-row span {
-  display: inline-block;
-  padding: 10px 15px;
-  background: rgba(255, 255, 255, 0.2);
-  border: 1px dashed #fff;
-  margin-right: -5px;
-}
-
-.coupon-row button {
-  background: white;
-  color: #7158fe;
-  border: none;
-  padding: 10px 15px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background 0.3s ease;
-}
-
-.coupon-row button:hover {
-  background: #7158fe;
+.profile-tabs .nav-link.active {
+  background-color: #007bff;
   color: white;
 }
 
-.coupon-card p {
-  font-size: 14px;
-  margin-top: 10px;
-}
-
-.circle1,
-.circle2 {
-  background: rgba(255, 255, 255, 0.1);
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  position: absolute;
-}
-
-.circle1 {
-  top: -20px;
-  left: -20px;
-}
-
-.circle2 {
-  bottom: -20px;
-  right: -20px;
-}
-
-/* Responsive Design */
-@media (max-width: 600px) {
-  .profile-picture {
-    width: 80px;
-    height: 80px;
-  }
-
-  .member-btn {
-    padding: 8px 10px;
-    font-size: 12px;
-  }
-
-  .coupon-cards {
-    flex-direction: column;
-    gap: 15px;
-  }
-
-  .coupon-card {
-    width: 90%;
-    margin: 0 auto;
-  }
-
-  .coupon-row span {
-    padding: 8px 12px;
-  }
-
-  .coupon-row button {
-    padding: 8px 12px;
-  }
-}
-
-/* 
-.modal {
+/* About Tab */
+.about-container {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  position: fixed;
-  z-index: 10;
-  left: 0;
-  top: 0;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 15px;
+}
+
+.about-container p {
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.about-container button {
+  width: 100%;
+}
+
+.about-edit-form,
+.about-details {
+  flex: 1 1 100%;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.action-buttons button {
+  width: 48%;
+}
+
+/* Tasks Tab */
+.tasks-tab .stats-box {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.tasks-tab .progress-section {
+  padding: 10px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Subscription Plans */
+.sub-tab {
+  text-align: center; /* Center-align child elements */
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.starter-plan-card,
+.monthly-plan-card,
+.yearly-plan-card {
+  display: inline-block; /* Allow cards to sit next to each other */
+  vertical-align: top; /* Align cards properly */
+  width: calc(33.333% - 20px); /* Default: 3 cards per row */
+  max-width: 400px;
+  margin: 10px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background: #fff;
+}
+
+.starter-plan-card:hover,
+.monthly-plan-card:hover,
+.yearly-plan-card:hover {
+  /* transform: translateY(-5px); */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.plan-header {
+  text-align: center;
+  padding: 20px;
+  font-weight: bold;
+  color: #b71c1c;
+}
+
+.starter-plan-card .plan-header {
+  background-color: #ffcdd2;
+}
+
+.monthly-plan-card .plan-header {
+  background-color: #ffffcd;
+}
+
+.yearly-plan-card .plan-header {
+  background-color: #d8ffcd;
+}
+
+.plan-body {
+  padding: 20px;
+  text-align: center;
+}
+
+.plan-features {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.plan-features li {
+  font-size: 0.9rem;
+  margin: 8px 0;
+}
+
+.subscribe-btn {
+  width: 100%;
+  margin-top: 20px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1024px) {
+  .starter-plan-card,
+  .monthly-plan-card,
+  .yearly-plan-card {
+    width: calc(50% - 20px); /* Two cards per row on tablets */
+  }
+}
+
+@media (max-width: 768px) {
+  .starter-plan-card,
+  .monthly-plan-card,
+  .yearly-plan-card {
+    width: calc(100% - 40px); /* Full-width cards on small screens */
+    margin: 20px auto; /* Center the cards */
+  }
+}
+
+/* Adjustments for very small screens */
+@media (max-width: 480px) {
+  .plan-header {
+    font-size: 1.1rem; /* Slightly smaller text for headers */
+    padding: 15px;
+  }
+
+  .plan-body {
+    padding: 15px;
+  }
+
+  .plan-features li {
+    font-size: 0.8rem; /* Reduce text size for smaller screens */
+  }
+
+  .subscribe-btn {
+    font-size: 0.9rem; /* Adjust button size */
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.membership-card {
+  height: 50vh;
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
+  margin: 20px auto;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #dfe9f3, #ffffff), url('../assets/images/memb-line-background.jpg') no-repeat center center;
+  background-size: cover;
+  background-blend-mode: hard-light;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.6s ease-in-out;
+}
+
+.membership-card:hover {
+  transform: rotateY(180deg);
+}
+
+.card-front .head{
+  padding: 10px;
+  border-radius: 12px 12px 0 0;
+  position: relative;
+  top: -13vh;
+
+  @media screen and (max-width: 768px) {
+    top: -10vh;
+    position: relative;
+    left: 5vh;
+     
+  }
+}
+
+.card-front .head h4{
+  text-align: center;
+  font-weight: bold;
+
+  @media screen and (max-width: 768px) {
+    font-size: 17px;
+     
+  }
+}
+
+.card-front .sub-head{
+  padding: 10px;
+  border-radius: 12px 12px 0 0;
+  position: relative;
+  top: -13vh;
+
+
+  @media screen and (max-width: 768px) {
+    top: -13vh;
+    position: relative;
+    left: 5vh;
+     
+  }
+
+}
+
+.card-front .sub-head h4{
+  text-align: center;
+  
+
+  @media screen and (max-width: 768px) {
+    font-size: 17px;
+     
+  }
+}
+
+
+
+
+.card-front .profile-card{
+   
+  padding: 10px;
+  position: relative;
+  top: -18vh;
+  margin: 20px auto;
+  width: 100%;
+
+  @media screen and (max-width: 768px) {
+    top: -12vh;
+    position: relative;
+    /* max-width: 70vh; */
+     
+  }
+
+}
+
+
+.card-front .card-content{
+  padding: 10px;
+  border-radius: 12px 12px 0 0;
+  position: relative;
+  top: -41vh;
+  left: 26vh;
+  max-width: 49vh;
+  font-weight: 600;
+  line-height: 5vh;
+
+  @media screen and (max-width: 768px) {
+    top: -32vh;
+    position: relative;
+    left: 16vh;
+    height: 9vh;
+    line-height: 5vh;
+    flex-wrap: wrap;
+    max-width: 60%;
+     
+  }
+
+}
+
+
+.card-front,
+.card-back {
+  position: absolute;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  backface-visibility: hidden;
+  border-radius: 12px;
+  padding: 20px;
 }
 
-.modal .modal-content {
-  overflow: hidden;
-  background: url(../assets/images/coupon1.png);
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  color: #5c1717;
-  text-align: center;
-   
-}
-
-.modal-content .logo {
-  width: 80px;
-  border-radius: 8px;
-  margin-bottom: 20px;
-}
-
-.modal-content h3 {
-  font-size: 28px;
-  font-weight: 400;
-  line-height: 40px;
-}
-
-.modal-content p {
-  font-size: 15px;
-}
-
-.modal-content .coupon-row {
+.card-front {
   display: flex;
-  align-items: center;
-  margin: 25px auto;
-  width: fit-content;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-.modal-content #cpnCode {
-  border: 1px dashed #fff;
-  padding: 10px 20px;
-  border-right: 0;
-}
 
-.modal-content #cpnBtn {
-  border: 1px solid #fff;
-  background: #ffffff;
-  padding: 10px 20px;
-  top: -5px;
-  left: 6px;
-  position: relative;
-  color: #7158fe;
-  cursor: pointer;
-}
-
-.modal-content .circle1,
-.modal-content .circle2 {
-  background: #ffffff;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.modal-content .circle1 {
-  left: -25px;
-}
-
-.modal-content .circle2 {
-  right: -25px;
-}
-
-.modal-content .close {
-  position: absolute;
-  top: 10px;
-  right: 20px;
-  font-size: 24px;
+.card-front .memb-footer{
+  background-color: #0056b3;
   color: #ffffff;
-  cursor: pointer;
-}
-  */
+  padding: 10px;
+  border-radius: 12px 12px 12px 12px;
+  position: relative;
+  top: -39vh;
+  height: 41px;
+  width: 105%;
+  left: -40px;
+  text-align: center;
 
-
-
-  .modal {
-    overflow-x: hidden;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: rgba(0, 0, 0, 0.7); /* Background overlay */
-    z-index: 9999;
-  }
-  
-  .modal-content {
-    
-    width: 90%;
-    max-width: 400px;
-    background-color: #fff;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    animation: slideDown 0.3s ease;
-  }
-  
-  @keyframes slideDown {
-    from {
-      transform: translateY(-20px);
-      opacity: 0;
-    }
-    to {
-      transform: translateY(0);
-      opacity: 1;
-    }
-  }
-  
-  .modal-content.coupon-card {
-    overflow: hidden;
+  @media screen and (max-width: 768px) {
+    top: -4vh;
+    width: 112%;
     position: relative;
-    background: linear-gradient(135deg, #ff3c3c, #ff7c3c); /* Gradient red background */
-    padding: 20px;
-    color: #fff;
-    font-family: Arial, sans-serif;
-    text-align: center;
-    border: 2px dashed #fff; /* Dotted border */
+    left: -5.6vh;
+    height: 9vh;
+     
   }
-  
-  .modal-content h3 {
-    font-size: 24px;
-    margin: 10px 0;
-  }
-  
-  .modal-content p {
-    font-size: 16px;
-    margin: 5px 0;
-  }
-  
-  .modal-content .coupon-row {
-    display: flex
-;
-    justify-content: space-evenly;
-    align-items: center;
-    margin: 25px 0  px;
+
 }
-  
-  #cpnCode {
-    font-weight: bold;
-    font-size: 18px;
-    background-color: #fff;
-    color: #ff3c3c;
-    padding: 5px 10px;
-    border-radius: 5px;
-    display: inline-block;
-  }
-  
-  #cpnBtn {
-    padding: 7.5px 11px;
-    background-color: #fff;
-    color: #ff3c3c;
-    font-weight: bold;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-    position: relative;
-    top: -5px;
+
+
+
+
+.card-back {
+  background-color: #1d1d1d;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  transform: rotateY(180deg);
+  text-align: center;
+  padding: 20px;
 }
-  #cpnBtn:hover {
-    background-color: #ff7c3c;
-    color: #fff;
-  }
-  
-  .modal-content img.logo {
-    width: 80px;
-    margin: 10px auto;
-  }
-  
-  .modal-content .circle1,
-  .modal-content .circle2 {
-    position: absolute;
-    background-color: rgb(255, 255, 255);
+
+.card-back h4 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  color: #ffd700;
+}
+
+.card-back ul {
+  list-style: none;
+  padding: 0;
+  font-size: 1rem;
+  color: #ffffff;
+}
+
+.card-back ul li {
+  margin: 10px 0;
+  font-size: 1rem;
+}
+
+.card-back .visit-text {
+  margin-top: 20px;
+  font-size: 0.9rem;
+  color: #ccc;
+  font-style: italic;
+}
+
+.logo-container img {
+  max-width: 80px;
+  height: auto;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+
+  @media screen and (max-width: 768px) {
+    max-width: 70px;
+    height: auto;
     border-radius: 50%;
+    border: 2px solid #ffffff;
+     
   }
-  
-  .modal-content .circle1 {
-    width: 50px;
-    height: 50px;
-    top: 140px;
-    left: -20px;
+
+}
+
+.profile-card img {
+  width: 15%;
+ 
+  border-radius: 10px;
+}
+
+.head h4,
+.sub-head h4 {
+  text-align: center;
+  color: #6a1b9a;
+}
+
+.card-content {
+  font-size: 1rem;
+  color: #333;
+}
+
+.membership-card-container {
+  perspective: 1000px;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .membership-card {
+    height: 60vh;
+    width: 90%;
   }
-  
-  .modal-content .circle2 {
-    width: 50px;
-    height: 50px;
-    bottom: 140px;
-    right: -20px;
+
+  .card-back ul li {
+    font-size: 0.9rem;
   }
-  
-  .close {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 20px;
-    cursor: pointer;
-    color: #fff;
-    background: transparent;
-    border: none;
+
+  .card-back h4 {
+    font-size: 1.2rem;
   }
-  
-  /* .close:hover {
-    color: #ff7c3c;
-  } */
-  
+}
+
+@media (max-width: 480px) {
+  .membership-card {
+    padding: 10px;
+    height: 70vh;
+  }
+
+  .card-back ul li {
+    font-size: 0.8rem;
+  }
+
+  .card-back h4 {
+    font-size: 1rem;
+  }
+
+  .card-back .visit-text {
+    font-size: 0.8rem;
+  }
+}
+
+
+
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 80%;
+  max-width: 900px;
+  text-align: center;
+  overflow: auto;
+  position: relative;
+  left: 30px;
+}

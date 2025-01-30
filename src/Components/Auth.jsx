@@ -44,8 +44,8 @@ export default function Auth({ children }) {
   };
   return (
     <div>
-      <Authcontext.Provider value={{ user, userData, Login, Logout }}>
-        {children}
+      <Authcontext.Provider value={{ user, userData, setUserData, Login, Logout }}>
+        {children} 
       </Authcontext.Provider>
     </div>
   );

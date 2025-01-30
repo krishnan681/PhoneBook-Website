@@ -70,7 +70,7 @@ const Datas = () => {
     setFilteredData(filtered);
   };
 
-  // Handle updating an existing row
+  // Handle updating an existing row  
   const handleUpdateRow = async () => {
     try {
       const response = await axios.post("https://signpostphonebook.in/update_row.php", editingRow); // Replace with your API URL
