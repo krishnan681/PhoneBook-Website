@@ -351,17 +351,19 @@ const handleTabChange = (selectedTab) => {
         {/* Tasks Tab */}
         {activeTab === "tasks" && (
           <div className="tasks-tab" style={{ padding: "10px" }}>
-          <div className="stats-box">
-            <h3>Counts: {isLoading ? "Loading..." : taskCount || "No entries today..."}</h3>
-          </div>
-          <div className="progress-section">
+            <div className="stats-box">
+              <h3>Counts: {isLoading ? "Loading..." : taskCount || "No entries today..."}</h3>
+            </div>
+            <div className="progress-section">
             <ProgressBar
-              now={(taskCount / 100) * 100}
-              label={`${Math.round((taskCount / 100) * 100)}%`}
+              now={(Math.min(taskCount, 1000) / 1000) * 100}
+              label={`${Math.round((Math.min(taskCount, 1000) / 1000) * 100)}%`}
             />
+
+
+            </div>
+            {error && <p className="error-message">{error}</p>}
           </div>
-          {error && <p className="error-message">{error}</p>}
-        </div>
         )}
 
         {/* Subscription Tab */}

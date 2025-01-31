@@ -455,6 +455,10 @@ export default UserProfile;
 
 
 
+------------------------------orignal for total count--------------------------------
+
+
+
 
 
 <?php
@@ -494,3 +498,106 @@ echo json_encode($data);
 // Close the database connection
 $conn->close();
 ?>
+
+
+
+
+
+------------------------------orignal for total count--------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------------------------------merged code-----------------------------------------------------
+
+
+
+
+
+<?php
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
+header('Content-Type: application/json');
+
+// Database credentials
+$host = 'localhost';
+$username = 'celfon5g_phonebookadmin';
+$password = 'PdVbHjFY!!ty';
+$dbname = 'celfon5g_ClientDatabase';
+
+// Create database connection
+$conn = new mysqli($host, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    die(json_encode(['error' => 'Database connection failed: ' . $conn->connect_error]));
+}
+
+// Get ID from request (POST or GET)
+$id = isset($_POST['id']) ? $_POST['id'] : (isset($_GET['id']) ? $_GET['id'] : null);
+
+if ($id) {
+    // Fetch total count for the specific ID
+    $stmt = $conn->prepare("SELECT id, name, SUM(count) AS total_count FROM dataEntryDetails WHERE id = ? GROUP BY id, name");
+    $stmt->bind_param("s", $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    
+    if ($result->num_rows > 0) {
+        $data = $result->fetch_assoc();
+        echo json_encode($data);
+    } else {
+        echo json_encode(['error' => 'No data found for the provided ID']);
+    }
+
+    $stmt->close();
+} else {
+    // Fetch all entries with total count if no specific ID is given
+    $sql = "SELECT id, name, SUM(count) AS total_count FROM dataEntryDetails GROUP BY id, name ORDER BY id ASC";
+    $result = $conn->query($sql);
+
+    $data = [];
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $data[] = $row;
+        }
+    }
+
+    echo json_encode($data);
+}
+
+// Close the database connection
+$conn->close();
+?>
+
+
+
+
+
+
+
+------------------------------merged code-----------------------------------------------------
